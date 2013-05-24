@@ -11,10 +11,10 @@ FD1Solver::FD1Solver(int spaceDimension, Vector<double> deltaX, Vector<double> x
     x.resize(m_spaceDimension); y.resize(m_spaceDimension);
     x[0] = 1; x[1] = 0; y[0] = 0; y[1] = 1;
 
-    for(unsigned int i=0;i<m_spaceDimension;i++) m_nxSteps[i] = m_xInterval[i]/m_deltaX[i];
+    for(int i=0;i<m_spaceDimension;i++) m_nxSteps[i] = m_xInterval[i]/m_deltaX[i];
     m_position.resize(m_spaceDimension);
     if(lowerLeftCorner.size() != m_spaceDimension) throw invalid_argument("lowerLeftCorner dimension is not equal to the space dimension");
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         m_position[dir].resize_field(m_nxSteps+2*(x+y));
         //assuming 2D space
@@ -57,7 +57,7 @@ double FD1Solver::check_CFL(double deltaT)
     Vector<ScalarField> waveSpeed(m_spaceDimension);
     Vector<double> maxFrequency(m_spaceDimension);
     double overallMaxFreq=0;
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         waveSpeed[dir] = right_localSpeed[dir].max_field(left_localSpeed[dir]);
         maxFrequency[dir] = waveSpeed[dir].get_max()/m_deltaX[dir];
@@ -78,14 +78,14 @@ double FD1Solver::minmod(double a, double b)
     return (signA + signB)*std::min(fabs(a), fabs(b));
 }
 
-double FD1Solver::three_pts_derivative(Vector<unsigned int> j, int dir)
+double FD1Solver::three_pts_derivative(Vector<int> j, int dir)
 {
-    Vector<unsigned int> jp;
-    Vector<unsigned int> jm;
+    Vector<int> jp;
+    Vector<int> jm;
     jp = j + (1-dir)*x + dir*y; //translation along the x axis if dir=0, along y axis if dir=1
     jm = j + (dir-1)*x + (-dir)*y;
 
-    //bc TODO replace that by a second layer of un in set_un, and don't forget to shift by 2*(x+y) un(Vector<unsigned int>)
+    //bc TODO replace that by a second layer of un in set_un, and don't forget to shift by 2*(x+y) un(Vector<int>)
     if(m_bc == periodic)
     {
         if(jm[0]==-2) jm[0]+=m_nxSteps[0];
@@ -105,11 +105,11 @@ double FD1Solver::three_pts_derivative(Vector<unsigned int> j, int dir)
     return minmod( (un(j) - un(jm))/m_deltaX[dir], (un(jp) - un(j))/m_deltaX[dir] );
 }
 
-double FD1Solver::intermediate_uxt_values(Vector<unsigned int> j, grid_position p, bound b, int dir)
+double FD1Solver::intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int dir)
 {
-    Vector<unsigned int> jp;
-    Vector<unsigned int> jm;
-    jp = j + (1-dir)*x + dir*y; //translation along the x axis if dir=0, along y axis if dir=1
+    Vector<int> jp;
+    Vector<int> jm;
+    jp = j + (1-dir)*x + dir*y;
     jm = j + (dir-1)*x + (-dir)*y;
 
     if(p == lft)
@@ -128,7 +128,7 @@ double FD1Solver::intermediate_uxt_values(Vector<unsigned int> j, grid_position 
 
 void FD1Solver::compute_intermediate_un_values()
 {
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         upper_right_intermediate_un_values[dir].resize_field(m_nxSteps);
         lower_right_intermediate_un_values[dir].resize_field(m_nxSteps);
@@ -136,8 +136,8 @@ void FD1Solver::compute_intermediate_un_values()
         lower_left_intermediate_un_values[dir].resize_field(m_nxSteps);
     }
 
-    Vector<unsigned int> p;
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    Vector<int> p;
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         for(int j=0;j<m_nxSteps[0];j++)
         {
@@ -159,7 +159,7 @@ void FD1Solver::compute_localSpeed()
     ScalarField upperSpeed;
     //Modify here if you want to use implicit definition of the jacobian
 
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         upperSpeed = m_eq->get_convectionFluxJacobian(upper_right_intermediate_un_values[dir])[dir];
         lowerSpeed = m_eq->get_convectionFluxJacobian(lower_right_intermediate_un_values[dir])[dir];
@@ -177,7 +177,7 @@ void FD1Solver::compute_numerical_convection_flux()
     ScalarField upperFlux;
     ScalarField lowerFlux;
 
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         upperFlux = m_eq->get_convectionFlux(upper_right_intermediate_un_values[dir])[dir];
         lowerFlux = m_eq->get_convectionFlux(lower_right_intermediate_un_values[dir])[dir];
@@ -191,7 +191,7 @@ void FD1Solver::compute_numerical_convection_flux()
 
 void FD1Solver::set_un(ScalarField Un)
 {
-    Vector<unsigned int> rBc; rBc = m_nxSteps + 2*(x+y);
+    Vector<int> rBc; rBc = m_nxSteps + 2*(x+y);
     m_un.resize_field(rBc);
 
     if(m_bc == null)
@@ -246,7 +246,7 @@ void FD1Solver::set_un(ScalarField Un)
 
     if(m_bc == periodic)
     {
-        Vector<unsigned int> p1; Vector<unsigned int> p2;
+        Vector<int> p1; Vector<int> p2;
         for(int dir=0;dir<2;dir++)
         {
             p1=0*p1;
@@ -285,24 +285,24 @@ ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
     compute_numerical_convection_flux();
     ScalarField flux_gradient(m_nxSteps);
     for(int j=0;j<m_nxSteps[0];j++) for(int k=0;k<m_nxSteps[1];k++) flux_gradient(j*x+k*y) = 0;
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
         flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] + (-1)*left_convection_flux[dir] );
     }
     return flux_gradient;
 }
 
-double FD1Solver::un(Vector<unsigned int> j)
+double FD1Solver::un(Vector<int> j)
 {
-    return m_un(j+(x+y));//yep, all is shifted...
+  return m_un(j+x+y);
 }
 
 
 void FD1Solver::resize_pos()
 {
     m_resizedPos.resize(m_spaceDimension);
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++) m_resizedPos[dir].resize_field(m_nxSteps);
-    for(unsigned int dir=0;dir<m_spaceDimension;dir++)
+    for(int dir=0;dir<m_spaceDimension;dir++) m_resizedPos[dir].resize_field(m_nxSteps);
+    for(int dir=0;dir<m_spaceDimension;dir++)
     {
     for(int j=1;j<m_nxSteps[0]+1;j++)
     {

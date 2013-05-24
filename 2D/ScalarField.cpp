@@ -3,11 +3,9 @@
 #include <math.h>
 using namespace std;
 
-#define DEBUG
-
 ScalarField::ScalarField()
 {
-  m_r = Vector<unsigned int>(0);
+  m_r = Vector<int>(0);
   m_r_len = m_r.size();
   m_data = 0;
   m_data_len = 0;
@@ -19,7 +17,7 @@ ScalarField::ScalarField(const ScalarField & u) : m_r(u.m_r), m_r_len(u.m_r_len)
     for(unsigned int i=0;i<m_data_len;i++) m_data[i] = u.m_data[i];
 }
 
-ScalarField::ScalarField(Vector<unsigned int> range)
+ScalarField::ScalarField(Vector<int> range)
 {
     m_r = range;
     m_r_len = m_r.size();
@@ -75,7 +73,7 @@ bool ScalarField::operator==(const ScalarField & u)
 
 ostream & operator<<(ostream & output, const ScalarField & u)
 {
-  Vector<unsigned int> pTemp(u.m_r_len);
+  Vector<int> pTemp(u.m_r_len);
     for(unsigned int i=0;i<u.m_data_len;i++)
     {
         pTemp = u.get_pos(i);
@@ -163,7 +161,7 @@ ScalarField operator*(const ScalarField & u, const ScalarField & v)
     return temp;
 }
 
-double & ScalarField::operator()(const Vector<unsigned int> & component)
+double & ScalarField::operator()(const Vector<int> & component)
 {
 #ifdef DEBUG
     if(component.size() != m_r_len) throw invalid_argument("In operator(): dimension differs from the field dimension");
@@ -208,7 +206,7 @@ double ScalarField::get_max() const
     return maximum;
 }
 
-void ScalarField::resize_field(Vector<unsigned int> range)
+void ScalarField::resize_field(Vector<int> range)
 {
     m_r_len = range.size();
     m_r = range;
@@ -219,10 +217,10 @@ void ScalarField::resize_field(Vector<unsigned int> range)
     m_data = new double[m_data_len];
 }
 
-Vector<unsigned int> ScalarField::get_pos(unsigned int i) const
+Vector<int> ScalarField::get_pos(int i) const
 {
-  Vector<unsigned int> p(m_r_len);
-    unsigned int tempI=i;
+  Vector<int> p(m_r_len);
+    int tempI=i;
     p[0] = i%m_r[0];
     for(unsigned int j=1;j<m_r_len;j++)
     {
@@ -234,7 +232,7 @@ Vector<unsigned int> ScalarField::get_pos(unsigned int i) const
 
 void ScalarField::write_in_file(ostream & output, const Vector<double> deltaX, const Vector<double> lowerLeftCorner)
 {
-  Vector<unsigned int> pTemp(m_r_len);
+  Vector<int> pTemp(m_r_len);
     for(unsigned int i=0;i<m_data_len;i++)
     {
         pTemp = get_pos(i);

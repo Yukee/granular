@@ -17,7 +17,7 @@
 
 using namespace std;
 
-double H=0.25;double W=1.;double U=2.3;int n=4;int m=2;double alpha=0.5;double uF=2.;double h=0.05;double sr=0.035;double shift=0.01;
+double H=1;double W=1.;double U=2.3;int n=4;int m=2;double alpha=0.5;double uF=2.;double h=0.05*H;double sr=0.035;double shift=0.01;
 double yShape(double x)
 {
     return W*sqrt(tanh(-x/H));
@@ -45,9 +45,9 @@ double coth(double x)
 
 ScalarField flowSurface(VectorField x)//flow surface in the y=0 plane
 {
-    Vector<unsigned int> r = x[0].get_range();
+    Vector<int> r = x[0].get_range();
     ScalarField surf(r);
-    Vector<unsigned int> xp(2,1);Vector<unsigned int> zp(2,1);
+    Vector<int> xp(2,1);Vector<int> zp(2,1);
     xp[1] = 0; zp[0] = 0;
     for(int j=0;j<r[0];j++)
     {
@@ -63,10 +63,10 @@ ScalarField flowSurface(VectorField x)//flow surface in the y=0 plane
 
 VectorField speed(VectorField x)//here the position x is resized to fit in the boundaries
 {
-    Vector<unsigned int> r = x[0].get_range();
+    Vector<int> r = x[0].get_range();
     VectorField speed(x[0].get_space_dimension());
     for(unsigned int dir=0;dir<x[0].get_space_dimension();dir++) speed[dir].resize_field(r);
-    Vector<unsigned int> xp(2,1);Vector<unsigned int> zp(2,1); xp[1] = 0; zp[0] = 0;
+    Vector<int> xp(2,1);Vector<int> zp(2,1); xp[1] = 0; zp[0] = 0;
 
     double xcurrent;
     double zcurrent;
@@ -115,8 +115,8 @@ VectorField lindf(ScalarField u)
 
 int main()
 {
-    Vector<unsigned int> x(2,1);
-    Vector<unsigned int> y(2,1);
+    Vector<int> x(2,1);
+    Vector<int> y(2,1);
     x[1] = 0; y[0] = 0;
 
     Vector<double> deltaX(2);
@@ -126,11 +126,11 @@ int main()
     Vector<double> lowerLeftCorner(2);
 
     deltaX[0] = 0.01;
-    deltaX[1] = 0.01;
-    xInterval[0] = 3;// -3<x<0
-    xInterval[1] = 1;// 0<z<1
-    lowerLeftCorner[0] = -xInterval[0]; lowerLeftCorner[1] = 0;
-    Vector<unsigned int> nxSteps(2);
+    deltaX[1] = 0.5;
+    xInterval[0] = 2*M_PI;// -3<x<0
+    xInterval[1] = H;// 0<z<1
+    lowerLeftCorner[0] = 0; lowerLeftCorner[1] = 0;
+    Vector<int> nxSteps(2);
     nxSteps[0] = xInterval[0]/deltaX[0];
     nxSteps[1] = xInterval[1]/deltaX[1];
     for(int i=0;i<2;i++) if(nxSteps[i]==INT_MAX) cout << "Number of space steps exceeds the largest possible value " << INT_MAX << endl;
@@ -138,49 +138,49 @@ int main()
     if(ntSteps==INT_MAX) cout << "Number of time steps exceeds the largest possible value " << INT_MAX << endl;
 
     /***********************Granular flow 2D*****************************************/
-    Equation *flow2DEq = new SegregationEquation(&speed, sr, 2);
-    FD1Solver *flow2Dsolver = new FD1Solver(2, deltaX, xInterval, flow2DEq, prescribedWestAndSouth, &flowSurface, lowerLeftCorner);
+    // Equation *flow2DEq = new SegregationEquation(&speed, sr, 2);
+    // FD1Solver *flow2Dsolver = new FD1Solver(2, deltaX, xInterval, flow2DEq, prescribedWestAndSouth, &flowSurface, lowerLeftCorner);
 
-    ScalarField psi0(nxSteps);//initial conditions, non extended outside the boundaries
-    VectorField pos = flow2Dsolver->get_resized_position();
-    for(int j=0;j<nxSteps[0];j++)
-    {
-        for(int k=0;k<nxSteps[1];k++)
-        {
-            if( pos[1](j*x+k*y)<(H-h)*flowDepth(pos[0](j*x+k*y)) ) psi0(j*x+k*y)=1;
-            else psi0(j*x+k*y)=0;
-        }
-    }
-    Vector<double> uWest(nxSteps[1]); Vector<double> uSouth(nxSteps[0]);
-    for(int k=0;k<nxSteps[1];k++)
-    {
-        if( pos[1](k*y)<(H-h)*flowDepth(pos[0](k*y) - nxSteps[0]) ) uWest[k] = 1;
-        else uWest[k] = 0;
-    }
-    flow2Dsolver->set_uWest(uWest);
-    for(int j=0;j<nxSteps[0];j++)
-    {
-        uSouth[j] = 1;
-    }
-    flow2Dsolver->set_uSouth(uSouth);
+    // ScalarField psi0(nxSteps);//initial conditions, non extended outside the boundaries
+    // VectorField pos = flow2Dsolver->get_resized_position();
+    // for(int j=0;j<nxSteps[0];j++)
+    // {
+    //     for(int k=0;k<nxSteps[1];k++)
+    //     {
+    //         if( pos[1](j*x+k*y)<(H-h)*flowDepth(pos[0](j*x+k*y)) ) psi0(j*x+k*y)=1;
+    //         else psi0(j*x+k*y)=0;
+    //     }
+    // }
+    // Vector<double> uWest(nxSteps[1]); Vector<double> uSouth(nxSteps[0]);
+    // for(int k=0;k<nxSteps[1];k++)
+    // {
+    //     if( pos[1](k*y)<(H-h)*flowDepth(pos[0](k*y) - nxSteps[0]) ) uWest[k] = 1;
+    //     else uWest[k] = 0;
+    // }
+    // flow2Dsolver->set_uWest(uWest);
+    // for(int j=0;j<nxSteps[0];j++)
+    // {
+    //     uSouth[j] = 1;
+    // }
+    // flow2Dsolver->set_uSouth(uSouth);
 
-    timeSolver *flow2DRK3 = new RK3Solver(deltaT, tInterval, flow2Dsolver, psi0);
-    flow2DRK3->get_solution("concentration_RK3");
+    // timeSolver *flow2DRK3 = new RK3Solver(deltaT, tInterval, flow2Dsolver, psi0);
+    // flow2DRK3->get_solution("concentration_RK3");
 
     /************************Burgers 2D***************************************************/
-//    Equation *burgersEq = new SingleEquation(&f, &df);
-//    FD1Solver *burgersSolver = new FD1Solver(2, deltaX, xInterval, burgersEq, periodic, &flowSurface, lowerLeftCorner);
-//    ScalarField u0(nxSteps);
-//    VectorField pos = burgersSolver->get_resized_position();
-//    for(int j=0;j<nxSteps[0];j++)
-//    {
-//        for(int k=0;k<nxSteps[1];k++)
-//        {
-//            u0(j*x+k*y) = 0.5 + sin(pos[0](j*x+k*y));
-//        }
-//    }
-//    timeSolver *burgersRK3 = new RK3Solver(deltaT, tInterval, burgersSolver, u0);
-//    burgersRK3->get_solution("test_burgers_1D");
+   Equation *burgersEq = new SingleEquation(&f, &df);
+   FD1Solver *burgersSolver = new FD1Solver(2, deltaX, xInterval, burgersEq, periodic, &flowSurface, lowerLeftCorner);
+   ScalarField u0(nxSteps);
+   VectorField pos = burgersSolver->get_resized_position();
+   for(int j=0;j<nxSteps[0];j++)
+   {
+       for(int k=0;k<nxSteps[1];k++)
+       {
+           u0(j*x+k*y) = 0.5 + sin(pos[0](j*x+k*y));
+       }
+   }
+   timeSolver *burgersRK3 = new RK3Solver(deltaT, tInterval, burgersSolver, u0);
+   burgersRK3->get_solution("test_burgers_1D");
 
     /**********************Wave 2D*******************************************************/
 //    Equation *linEq = new SingleEquation(&f, &df);

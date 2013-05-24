@@ -73,7 +73,7 @@ public:
     }
 
 private:
-    unsigned int m_spaceDimension;
+    int m_spaceDimension;
     Vector<double> m_deltaX;
     Vector<double> m_xInterval;
     Equation *m_eq;
@@ -81,7 +81,7 @@ private:
     boundarySurface m_bs;
     Vector<double> m_lowerLeftCorner;
     ScalarField m_test_boundaries;//the evalutation of m_bs over all positions m_position
-    Vector<unsigned int> m_nxSteps;
+    Vector<int> m_nxSteps;
     ScalarField m_un;
     VectorField left_convection_flux;//convection_flux[i] = flux in the i direction of space
     VectorField right_convection_flux;
@@ -98,17 +98,17 @@ private:
     void compute_localSpeed();
     void compute_numerical_convection_flux();
     double minmod(double a, double b);
-    double three_pts_derivative(Vector<unsigned int> j, int direction); //du/dx at point j in the x or y direction
-    double intermediate_uxt_values(Vector<unsigned int> j, grid_position p, bound b, int direction); //un(+-)(j+-1/2) at point j in the x or y direction
-    double un(Vector<unsigned int> j);
+    double three_pts_derivative(Vector<int> j, int direction); //du/dx at point j in the x or y direction
+    double intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int direction); //un(+-)(j+-1/2) at point j in the x or y direction
+    double un(Vector<int> j);
     void resize_pos();//compute a position vector m_resizedPos with non extended BC
 
     //For the prescribed boundary case
     Vector<double> uWest;
     Vector<double> uSouth;
 
-    Vector<unsigned int> x;
-    Vector<unsigned int> y;
+    Vector<int> x;
+    Vector<int> y;
 };
 
 

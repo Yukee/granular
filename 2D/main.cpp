@@ -14,7 +14,6 @@
 #include "SegregationEquation.h"
 #include "SingleEquation.h"
 
-
 using namespace std;
 
 double H=1;double W=1.;double U=2.3;int n=4;int m=2;double alpha=0.5;double uF=2.;double h=0.05*H;double sr=0.035;double shift=0.01;

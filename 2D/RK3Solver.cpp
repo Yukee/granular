@@ -1,6 +1,7 @@
 #include "RK3Solver.h"
 #include "FD1Solver.h"
 #include <string>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ void RK3Solver::get_solution(string name)
     double testDeltaT;
     double newDeltaT = m_deltaT;
     double currenttime = 0;
-    long long int writingCounter = 0;
+    int writingCounter = 0;
 
     for(currenttime=0;currenttime<=m_T;currenttime += newDeltaT)
     {
@@ -43,7 +44,8 @@ void RK3Solver::get_solution(string name)
         if( (int)(1*currenttime) == writingCounter )
         {
             cout << "writing file number " << writingCounter << endl;
-            path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv";
+            //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; only in C++ 11
+	    path =  "Results/" + name + "_" + boost::lexical_cast<string>(writingCounter) + ".tsv";
             data.open(path.c_str(), ios::out);
             u.write_in_file(data, deltaX, lowerLeftCorner);
             data.close();

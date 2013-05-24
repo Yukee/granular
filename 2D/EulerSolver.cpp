@@ -1,6 +1,7 @@
 #include "EulerSolver.h"
 #include "FD1Solver.h"
 #include <iostream>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ void EulerSolver::get_solution(string name)
     double testDeltaT;
     double newDeltaT = m_deltaT;
     double currenttime = 0;
-    long long int writingCounter = 0;
+    int writingCounter = 0;
 
     ScalarField un1 = m_un;
     ScalarField df;
@@ -37,7 +38,8 @@ void EulerSolver::get_solution(string name)
         if( (int)(10*currenttime) == writingCounter )
         {
             cout << "writing file number " << writingCounter << endl;
-            path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv";
+            //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; Only in C++ 11
+	    path =  "Results/" + name + "_" + boost::lexical_cast<string>(writingCounter) + ".tsv";
             data.open(path.c_str(), ios::out);
             un1.write_in_file(data, deltaX, lowerLeftCorner);
             data.close();

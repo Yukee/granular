@@ -2,6 +2,7 @@
 #include <fstream>
 #include <math.h>
 #include <limits.h>
+#include <time.h>
 #include "Vector.h"
 #include "Equation.h"
 #include "FD1Solver.h"
@@ -15,6 +16,8 @@
 #include "SingleEquation.h"
 
 using namespace std;
+
+clock_t currentT;
 
 double H=1;double W=1.;double U=2.3;int n=4;int m=2;double alpha=0.5;double uF=2.;double h=0.05*H;double sr=0.035;double shift=0.01;
 double yShape(double x)
@@ -125,7 +128,7 @@ int main()
     Vector<double> lowerLeftCorner(2);
 
     deltaX[0] = 0.01;
-    deltaX[1] = 0.5;
+    deltaX[1] = 0.001;
     xInterval[0] = 2*M_PI;// -3<x<0
     xInterval[1] = H;// 0<z<1
     lowerLeftCorner[0] = 0; lowerLeftCorner[1] = 0;
@@ -179,6 +182,7 @@ int main()
        }
    }
    timeSolver *burgersRK3 = new RK3Solver(deltaT, tInterval, burgersSolver, u0);
+   cout << currentT << endl;
    burgersRK3->get_solution("test_burgers_1D");
 
     /**********************Wave 2D*******************************************************/

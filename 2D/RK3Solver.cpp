@@ -27,10 +27,10 @@ void RK3Solver::get_solution(string name)
 
     for(currenttime=0;currenttime<=m_T;currenttime += newDeltaT)
     {
-        newDeltaT = m_deltaT;
 
+        newDeltaT = m_deltaT;
         df = m_spatialSolver->get_numerical_flux_gradient(m_un);
-        testDeltaT = m_spatialSolver->check_CFL(newDeltaT);
+	testDeltaT = m_spatialSolver->check_CFL(newDeltaT);
         if(testDeltaT!=newDeltaT) newDeltaT = testDeltaT;
 
         u = m_un + (-1)*newDeltaT*df;

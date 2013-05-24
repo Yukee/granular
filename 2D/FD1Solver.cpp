@@ -2,6 +2,7 @@
 #include <math.h>
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 using namespace std;
 
@@ -80,6 +81,7 @@ double FD1Solver::minmod(double a, double b)
 
 double FD1Solver::three_pts_derivative(Vector<int> j, int dir)
 {
+  double deriv;
     Vector<int> jp;
     Vector<int> jm;
     jp = j + (1-dir)*x + dir*y; //translation along the x axis if dir=0, along y axis if dir=1
@@ -102,7 +104,8 @@ double FD1Solver::three_pts_derivative(Vector<int> j, int dir)
         if(jp[1]==m_nxSteps[1]+1) return (un(j) - un(jm))/m_deltaX[dir];
     }
 
-    return minmod( (un(j) - un(jm))/m_deltaX[dir], (un(jp) - un(j))/m_deltaX[dir] );
+    deriv = minmod( (un(j) - un(jm))/m_deltaX[dir], (un(jp) - un(j))/m_deltaX[dir] );
+    return deriv;
 }
 
 double FD1Solver::intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int dir)
@@ -279,10 +282,27 @@ void FD1Solver::set_un(ScalarField Un)
 //the flux gradient may be infinite, if you take a too large time step.
 ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
 {
+  clock_t dt=clock();
     set_un(un);
+    dt = clock() - dt;
+    cout << "set un in " << dt << endl;
+
+    dt = clock();
     compute_intermediate_un_values();
+    dt = clock() - dt;
+    cout << "computed intermediate values in " << dt << endl;
+
+    dt = clock();
     compute_localSpeed();
+    dt = clock() - dt;
+    cout << "computed local speed in " << dt << endl;
+
+ dt = clock();
     compute_numerical_convection_flux();
+    dt = clock() - dt;
+    cout << "computed convection flux in " << dt << endl;
+
+ dt = clock();
     ScalarField flux_gradient(m_nxSteps);
     for(int j=0;j<m_nxSteps[0];j++) for(int k=0;k<m_nxSteps[1];k++) flux_gradient(j*x+k*y) = 0;
     for(int dir=0;dir<m_spaceDimension;dir++)
@@ -290,6 +310,9 @@ ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
         flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] + (-1)*left_convection_flux[dir] );
     }
     return flux_gradient;
+    dt = clock() - dt;
+    cout << "computed flux gradient in " << dt << endl;
+
 }
 
 double FD1Solver::un(Vector<int> j)

@@ -1,0 +1,550 @@
+# depslib dependency file v1.0
+1367838811 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\equation.cpp
+	"Equation.h"
+
+1368608787 h"
+
+1367838515 c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\equation.h
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+
+1368880950 
+
+1363263765 c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\position.h
+	<iostream>
+
+1367856198 c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\scalarfield.h
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+	<vector>
+
+1367918431 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\fd1solver.cpp
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+
+1367856815 c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\fd1solver.h
+	<vector>
+	"Equation.h"
+	"Position.h"
+	"ScalarField.h"
+
+1368624941 ld.h"
+
+1367862277 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\main.cpp
+	<iostream>
+	<vector>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"RK3Solver.h"
+	"Position.h"
+	"ScalarField.h"
+
+1367783110 c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\timesolver.h
+	<vector>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+
+1367782818 c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\rk3solver.h
+	"ScalarField.h"
+	"timeSolver.h"
+
+1368784659 r.h"
+
+1363263793 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\position.cpp
+	"Position.h"
+
+1367859101 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\rk3solver.cpp
+	"RK3Solver.h"
+	"FD1Solver.h"
+
+1368113352 .h"
+
+1367856187 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\scalarfield.cpp
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+
+1367862636 source:c:\users\nicolas\dropbox\programmes\programmes c++\numerical\windows\timesolver.cpp
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+
+1367838811 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/Equation.cpp
+	"Equation.h"
+	"Equation.h"
+
+1367838515 /home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/Equation.h
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+
+1368009020 /home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/Position.h
+	<iostream>
+	<iostream>
+
+1368526006 /home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/ScalarField.h
+	"Position.h"
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+	"Position.h"
+	<vector>
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+
+1368113352 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/RK3Solver.cpp
+	"RK3Solver.h"
+	"FD1Solver.h"
+	"RK3Solver.h"
+	"FD1Solver.h"
+
+1368113332 /home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/RK3Solver.h
+	"ScalarField.h"
+	"timeSolver.h"
+	"ScalarField.h"
+	"timeSolver.h"
+
+1368113322 /home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/timeSolver.h
+	<vector>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+	<vector>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+
+1368526857 /home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/FD1Solver.h
+	<vector>
+	"Equation.h"
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+	"Equation.h"
+	"Position.h"
+	"ScalarField.h"
+
+1368526731 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/FD1Solver.cpp
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+
+1368009082 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/Position.cpp
+	"Position.h"
+	<exception>
+	<stdexcept>
+	"Position.h"
+	<exception>
+	<stdexcept>
+
+1368539041 >
+
+1368525989 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/ScalarField.cpp
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+
+1368526375 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/main.cpp
+	<iostream>
+	<vector>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"RK3Solver.h"
+	"Position.h"
+	"ScalarField.h"
+	<iostream>
+	<vector>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"RK3Solver.h"
+	"Position.h"
+	"ScalarField.h"
+
+1367862636 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Numerical/Windows/timeSolver.cpp
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+
+1367838811 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\equation.cpp
+	"Equation.h"
+
+1367838515 c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\equation.h
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+
+1368539046 c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\position.h
+	<iostream>
+
+1368526006 c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\scalarfield.h
+	"Position.h"
+	<vector>
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+
+1368538433 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\main.cpp
+	<iostream>
+	<vector>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"RK3Solver.h"
+	"Position.h"
+	"ScalarField.h"
+
+1368538464 c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\fd1solver.h
+	<vector>
+	"Equation.h"
+	"Position.h"
+	"ScalarField.h"
+
+1368113322 c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\timesolver.h
+	<vector>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+
+1368113332 c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\rk3solver.h
+	"ScalarField.h"
+	"timeSolver.h"
+
+1368539041 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\position.cpp
+	"Position.h"
+	<exception>
+	<stdexcept>
+
+1367862636 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\timesolver.cpp
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+
+1368538578 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\fd1solver.cpp
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+
+1368113352 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\rk3solver.cpp
+	"RK3Solver.h"
+	"FD1Solver.h"
+
+1368525989 source:c:\users\nicolas\dropbox\programmes\programmes_c++\numerical\windows\scalarfield.cpp
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+
+1368623188 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\equation.cpp
+	"Equation.h"
+
+1368623173 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\equation.h
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+
+1368539046 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\position.h
+	<iostream>
+
+1368881179 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\scalarfield.h
+	"Position.h"
+	<vector>
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+
+1368880950 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\fd1solver.cpp
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+
+1368628450 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\fd1solver.h
+	<vector>
+	"Equation.h"
+	"Position.h"
+	"ScalarField.h"
+
+1368539041 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\position.cpp
+	"Position.h"
+	<exception>
+	<stdexcept>
+
+1368787773 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\rk3solver.cpp
+	"RK3Solver.h"
+	"FD1Solver.h"
+	<string>
+
+1368784659 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\rk3solver.h
+	"ScalarField.h"
+	"timeSolver.h"
+
+1368785768 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\timesolver.h
+	<vector>
+	<string>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+
+1368881231 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\scalarfield.cpp
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+
+1367862636 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\timesolver.cpp
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+
+1368623188 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Equation.cpp
+	"Equation.h"
+
+1368623173 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Equation.h
+	"Position.h"
+	"ScalarField.h"
+	<vector>
+
+1368539046 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Position.h
+	<iostream>
+
+1368881179 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/ScalarField.h
+	"Position.h"
+	<vector>
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+
+1368539041 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Position.cpp
+	"Position.h"
+	<exception>
+	<stdexcept>
+
+1368787773 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/RK3Solver.cpp
+	"RK3Solver.h"
+	"FD1Solver.h"
+	<string>
+
+1368784659 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/RK3Solver.h
+	"ScalarField.h"
+	"timeSolver.h"
+
+1368785768 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/timeSolver.h
+	<vector>
+	<string>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+
+1368628450 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/FD1Solver.h
+	<vector>
+	"Equation.h"
+	"Position.h"
+	"ScalarField.h"
+
+1368881231 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/ScalarField.cpp
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+
+1367862636 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/timeSolver.cpp
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+
+1368880950 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/FD1Solver.cpp
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+
+1368608787 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SegregationEquation.cpp
+	"SegregationEquation.h"
+	"Equation.h"
+
+1368624941 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SegregationEquation.h
+	"Equation.h"
+	"ScalarField.h"
+
+1368784591 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/main.cpp
+	<iostream>
+	<vector>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"RK3Solver.h"
+	"Position.h"
+	"ScalarField.h"
+	"SegregationEquation.h"
+	"SingleEquation.h"
+
+1368882084 ation.h"
+
+1368782241 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SingleEquation.cpp
+	"SingleEquation.h"
+
+1368782760 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SingleEquation.h
+	"Equation.h"
+
+1368882084 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\main.cpp
+	<iostream>
+	<vector>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"RK3Solver.h"
+	"Position.h"
+	"ScalarField.h"
+	"SegregationEquation.h"
+	"SingleEquation.h"
+
+1368624941 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\segregationequation.h
+	"Equation.h"
+	"ScalarField.h"
+
+1368782760 c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\singleequation.h
+	"Equation.h"
+
+1368608787 source:c:\users\nicolas\dropbox\programmes\programmes_c++\granular\2d\segregationequation.cpp
+	"SegregationEquation.h"
+	"Equation.h"
+
+1369140816 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Equation.cpp
+	"Equation.h"
+
+1369141860 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Equation.h
+	"Vector.h"
+	"ScalarField.h"
+
+1368539046 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Position.h
+	<iostream>
+
+1369139808 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/ScalarField.h
+	"Vector.h"
+	<cstring>
+	<exception>
+	<stdexcept>
+	<iostream>
+
+1369141872 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/EulerSolver.cpp
+	"EulerSolver.h"
+	"FD1Solver.h"
+	<iostream>
+
+1368972312 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/EulerSolver.h
+	"timeSolver.h"
+
+1368785768 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/timeSolver.h
+	<vector>
+	<string>
+	<fstream>
+	"FD1Solver.h"
+	"ScalarField.h"
+
+1369219687 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/FD1Solver.h
+	"Equation.h"
+	"Vector.h"
+	"ScalarField.h"
+
+1369218063 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/FD1Solver.cpp
+	"FD1Solver.h"
+	<math.h>
+	<iostream>
+	<fstream>
+
+1368539041 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Position.cpp
+	"Position.h"
+	<exception>
+	<stdexcept>
+
+1369149528 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/RK3Solver.cpp
+	"RK3Solver.h"
+	"FD1Solver.h"
+	<string>
+
+1368784659 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/RK3Solver.h
+	"ScalarField.h"
+	"timeSolver.h"
+
+1369142421 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/ScalarField.cpp
+	"ScalarField.h"
+	<stdio.h>
+	<math.h>
+
+1369142519 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SegregationEquation.cpp
+	"SegregationEquation.h"
+	"Equation.h"
+
+1369216646 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SegregationEquation.h
+	"Equation.h"
+	"ScalarField.h"
+
+1368782241 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SingleEquation.cpp
+	"SingleEquation.h"
+
+1369142591 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/SingleEquation.h
+	"Equation.h"
+
+1369218475 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/main.cpp
+	<iostream>
+	<fstream>
+	<math.h>
+	<limits.h>
+	"Vector.h"
+	"Equation.h"
+	"FD1Solver.h"
+	"timeSolver.h"
+	"EulerSolver.h"
+	"RK3Solver.h"
+	"Vector.h"
+	"ScalarField.h"
+	"SegregationEquation.h"
+	"SingleEquation.h"
+
+1367862636 source:/home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/timeSolver.cpp
+	"timeSolver.h"
+	<iostream>
+	<fstream>
+
+1369142333 /home/nmace/Dropbox/Programmes/Programmes_C++/Granular/2D/Vector.h
+	<stdexcept>
+

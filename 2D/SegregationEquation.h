@@ -9,19 +9,20 @@ We may just solve the psi equation. In that case we need to give the program the
 values of the u, v, w fields, and this is the purpose of this class */
 
 typedef Vector<ScalarField> (*vectorFunction)(Vector<ScalarField>);
+typedef ScalarField (*scalarFunction)(Vector<ScalarField>);
 
 class SegregationEquation : public Equation
 {
 public:
-    SegregationEquation(vectorFunction speed_fun, double segregationRate, unsigned int dim); //we need to know the number of space dimensions to specify the number of components of the vectors
+  SegregationEquation(vectorFunction speed_fun, scalarFunction dv, double segregationRate, unsigned int dim); //we need to know the number of space dimensions to specify the number of components of the vectors
     inline void set_speed_field(Vector<ScalarField> position, ScalarField boundaries)
     {
         m_speed = boundaries*m_speed_fun(position);
-//        for(unsigned int i=0;i<position.size();i++)
-//        {
-//            m_speed[i] = m_speed_fun(position)[i]*boundaries;//speed is 0 outside boundaries
-//        }
         m_segregationRate = m_sr*boundaries;
+    }
+    inline void set_transverse_speed_gradient(Vector<ScalarField> position, ScalarField boundaries)
+    {
+      m_dv = boundaries*m_transverse_speed_gradient(position);
     }
     inline Vector<ScalarField> get_speed_field()
     {
@@ -35,12 +36,18 @@ public:
     {
         return m_df(un);
     }
+    inline ScalarField get_sourceTerm(ScalarField un)
+    {
+      return m_d(un);
+    }
 
 private:
     vectorFunction m_speed_fun;
+    scalarFunction m_transverse_speed_gradient;
     double m_sr;
     ScalarField m_segregationRate; //the sr is null outside the boundary surface
     Vector<ScalarField> m_speed;
+    ScalarField m_dv;
     Vector<ScalarField> m_flux;
     Vector<ScalarField> m_fluxJabobian;
 
@@ -58,6 +65,11 @@ private:
         m_fluxJabobian[1]=m_speed[1]+(-1)*m_segregationRate*(1+(-2)*u);
 
         return m_fluxJabobian;
+    }
+
+    inline ScalarField m_d(ScalarField u)
+    {
+      return (-1)*u*m_dv;
     }
 };
 #endif // SEGEQ_H

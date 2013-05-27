@@ -3,3 +3,4 @@
 Equation::Equation()
 {
 }
+

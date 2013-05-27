@@ -2,7 +2,6 @@
 #include <fstream>
 #include <math.h>
 #include <limits.h>
-#include <time.h>
 #include "Vector.h"
 #include "Equation.h"
 #include "FD1Solver.h"
@@ -16,8 +15,6 @@
 #include "SingleEquation.h"
 
 using namespace std;
-
-clock_t currentT;
 
 double H=1;double W=1.;double U=2.3;int n=4;int m=2;double alpha=0.5;double uF=2.;double h=0.05*H;double sr=0.14;double shift=0.01;
 double yShape(double x)
@@ -95,6 +92,28 @@ VectorField speed(VectorField x)//here the position x is resized to fit in the b
     return speed;
 }
 
+ScalarField dv(VectorField x)
+{
+  Vector<int> r = x[0].get_range();
+  ScalarField dv(r);
+
+  Vector<int> xp(2,1);Vector<int> zp(2,1); xp[1] = 0; zp[0] = 0;
+  double xcurrent;
+  double zcurrent;
+  for(int j=0;j<r[0];j++)
+    {
+      for(int k=0;k<r[1];k++)
+	{
+	  xcurrent = x[0](j*xp+k*zp);
+	  zcurrent = x[1](j*xp+k*zp);
+	  dv(j*xp+k*zp) = 0.31846153846153846*pow(coth(xcurrent),2)*pow(csch(xcurrent),2)*
+	    (0.5 + zcurrent*pow(coth(xcurrent),4)*pow(tanh(xcurrent),7));
+	}
+    }
+
+  return dv;
+}
+
 VectorField f(ScalarField u)
 {
     return VectorField (2,0.5*u*u);
@@ -140,7 +159,7 @@ int main()
     if(ntSteps==INT_MAX) cout << "Number of time steps exceeds the largest possible value " << INT_MAX << endl;
 
     /***********************Granular flow 2D*****************************************/
-    Equation *flow2DEq = new SegregationEquation(&speed, sr, 2);
+    Equation *flow2DEq = new SegregationEquation(&speed, &dv, sr, 2);
     FD1Solver *flow2Dsolver = new FD1Solver(2, deltaX, xInterval, flow2DEq, prescribedWestAndSouth, &flowSurface, lowerLeftCorner);
 
     ScalarField psi0(nxSteps);//initial conditions, non extended outside the boundaries
@@ -167,7 +186,7 @@ int main()
     flow2Dsolver->set_uSouth(uSouth);
 
     timeSolver *flow2DRK3 = new RK3Solver(deltaT, tInterval, flow2Dsolver, psi0);
-    flow2DRK3->get_solution("concentration_without_source");
+    flow2DRK3->get_solution("concentration_with_source");
 
     /************************Burgers 2D***************************************************/
    // Equation *burgersEq = new SingleEquation(&f, &df);

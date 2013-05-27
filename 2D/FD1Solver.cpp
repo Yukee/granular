@@ -32,6 +32,10 @@ FD1Solver::FD1Solver(int spaceDimension, Vector<double> deltaX, Vector<double> x
         cout << "begining calculating speed field" << endl;
         m_eq->set_speed_field(m_resizedPos, m_bs(m_resizedPos));
         cout << "finished calculating speed field" << endl;
+
+	cout << "beginning calculation speed gradient dv/dy" << endl;
+	m_eq->set_transverse_speed_gradient(m_resizedPos, m_bs(m_resizedPos));
+	cout << "finished calculation speed gradient dv/dy" << endl;
     }
 
     upper_right_intermediate_un_values.resize(m_spaceDimension);
@@ -311,8 +315,9 @@ ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
     for(int j=0;j<m_nxSteps[0];j++) for(int k=0;k<m_nxSteps[1];k++) flux_gradient(j*x+k*y) = 0;
     for(int dir=0;dir<m_spaceDimension;dir++)
     {
-        flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] + (-1)*left_convection_flux[dir] );
+      flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] - left_convection_flux[dir] );
     }
+    flux_gradient = flux_gradient - m_eq->get_sourceTerm(m_un);
     return flux_gradient;
 }
 

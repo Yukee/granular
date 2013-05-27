@@ -128,7 +128,7 @@ int main()
     Vector<double> lowerLeftCorner(2);
 
     deltaX[0] = 0.01;
-    deltaX[1] = 0.001;
+    deltaX[1] = 0.5;
     xInterval[0] = 2*M_PI;// -3<x<0
     xInterval[1] = H;// 0<z<1
     lowerLeftCorner[0] = 0; lowerLeftCorner[1] = 0;
@@ -183,7 +183,7 @@ int main()
    }
    timeSolver *burgersRK3 = new RK3Solver(deltaT, tInterval, burgersSolver, u0);
    cout << currentT << endl;
-   burgersRK3->get_solution("test_burgers_1D");
+   burgersRK3->get_solution("test_burgers_1D_new");
 
     /**********************Wave 2D*******************************************************/
 //    Equation *linEq = new SingleEquation(&f, &df);

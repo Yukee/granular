@@ -94,12 +94,13 @@ private:
     VectorField right_localSpeed;
     VectorField left_localSpeed;
 
+    Vector<double> u_values_at_cell_edges(Vector<int> j);
     void compute_intermediate_un_values();
     void compute_localSpeed();
     void compute_numerical_convection_flux();
     double minmod(double a, double b);
     double three_pts_derivative(Vector<int> j, int direction); //du/dx at point j in the x or y direction
-    double intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int direction); //un(+-)(j+-1/2) at point j in the x or y direction
+    // double intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int direction); //un(+-)(j+-1/2) at point j in the x or y direction
     double un(Vector<int> j);
     void resize_pos();//compute a position vector m_resizedPos with non extended BC
 

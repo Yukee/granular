@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      4903,        121]
-NotebookOptionsPosition[      4517,        103]
-NotebookOutlinePosition[      4856,        118]
-CellTagsIndexPosition[      4813,        115]
+NotebookDataLength[      6321,        172]
+NotebookOptionsPosition[      5750,        148]
+NotebookOutlinePosition[      6086,        163]
+CellTagsIndexPosition[      6043,        160]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -99,10 +99,55 @@ Cell[BoxData[
    3.578401161736094*^9}, 3.578401229215763*^9, {3.578401298581512*^9, 
    3.578401352555707*^9}, 3.5784014476169577`*^9, {3.578401537850874*^9, 
    3.578401548792297*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"caca1", "=", " ", 
+   RowBox[{
+   "Import", "[", 
+    "\"\</home/nmace/git/granular/2D/Results/test_burgers_1D_new_20.tsv\>\"", 
+    "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.578644862554761*^9, 3.578644888888336*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"caca2", "=", 
+   RowBox[{
+   "Import", "[", 
+    "\"\</home/nmace/git/granular/2D/Results/test_burgers_1D_20.tsv\>\"", 
+    "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.578644891001823*^9, 3.578644904375515*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ListContourPlot", "[", 
+  RowBox[{"1000", "*", 
+   RowBox[{"(", 
+    RowBox[{"caca1", "-", "caca2"}], ")"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.578644912893237*^9, 3.5786449237264977`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[GraphicsComplexBox[CompressedData["
+1:eJztxUEJACAUBbCHWMRKRhA8/9rGEHO4XTZWzd2SnJ68AQAAAAAAAAAAAAAA
+AAAAAAAAAPjDBWTwApo=
+   "], {}],
+  AspectRatio->1,
+  Frame->True,
+  FrameLabel->{None, None},
+  Method->{},
+  PlotRange->{{0., 0.}, {0., 0.}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{{3.578644917406023*^9, 3.578644924315824*^9}, 
+   3.578645739918713*^9}]
 }, Open  ]]
 },
 WindowSize->{967, 930},
-WindowMargins->{{Automatic, 425}, {-242, Automatic}},
+WindowMargins->{{334, Automatic}, {4, Automatic}},
 FrontEndVersion->"9.0 for Linux x86 (64-bit) (February 7, 2013)",
 StyleDefinitions->"Default.nb"
 ]
@@ -121,7 +166,13 @@ Cell[557, 20, 1127, 19, 32, "Input"],
 Cell[1687, 41, 244, 7, 32, "Input"],
 Cell[CellGroupData[{
 Cell[1956, 52, 931, 16, 32, "Input"],
-Cell[2890, 70, 1611, 30, 423, "Output"]
+Cell[2890, 70, 1611, 30, 390, "Output"]
+}, Open  ]],
+Cell[4516, 103, 259, 7, 32, "Input"],
+Cell[4778, 112, 250, 7, 32, "Input"],
+Cell[CellGroupData[{
+Cell[5053, 123, 219, 5, 32, "Input"],
+Cell[5275, 130, 459, 15, 399, "Output"]
 }, Open  ]]
 }
 ]

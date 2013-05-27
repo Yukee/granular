@@ -2,7 +2,6 @@
 #include <math.h>
 #include <iostream>
 #include <fstream>
-#include <time.h>
 
 using namespace std;
 
@@ -64,19 +63,20 @@ double FD1Solver::check_CFL(double deltaT)
         maxFrequency[dir] = waveSpeed[dir].get_max()/m_deltaX[dir];
         if(maxFrequency[dir]>overallMaxFreq) overallMaxFreq = maxFrequency[dir];
     }
-    if(newDeltaT>1/(8*overallMaxFreq)) newDeltaT = 1/(16*overallMaxFreq);
+    if(newDeltaT>1/(8*overallMaxFreq)) newDeltaT = 1/(9*overallMaxFreq);
     return newDeltaT;
 }
 
 double FD1Solver::minmod(double a, double b)
 {
-    double signA;
-    if(a<0) signA = -0.5;
-    else signA = 0.5;
-    double signB;
-    if(b<0) signB = -0.5;
-    else signB = 0.5;
-    return (signA + signB)*std::min(fabs(a), fabs(b));
+  double minmod;
+  if(a*b<=0) minmod = 0;
+  else
+    {
+      if(a>0) minmod = min(a,b);
+      else minmod = max(a,b);
+    }
+  return minmod;
 }
 
 double FD1Solver::three_pts_derivative(Vector<int> j, int dir)
@@ -108,25 +108,44 @@ double FD1Solver::three_pts_derivative(Vector<int> j, int dir)
     return deriv;
 }
 
-double FD1Solver::intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int dir)
+// double FD1Solver::intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int dir)
+// {
+//     Vector<int> jp;
+//     Vector<int> jm;
+//     jp = j + (1-dir)*x + dir*y;
+//     jm = j + (dir-1)*x + (-dir)*y;
+
+//     if(p == lft)
+//     {
+//         if(b == lower) return un(jm) + m_deltaX[dir]*un_derivative[dir](jm)*0.5;
+//         if(b == upper) return un(j) - m_deltaX[dir]*un_derivative[dir](j)*0.5;
+//     }
+//     if(p == rght)
+//     {
+//         if(b == lower) return un(j) + m_deltaX[dir]*un_derivative[dir](j)*0.5;
+//         if(b == upper) return un(jp) - m_deltaX[dir]*un_derivative[dir](jp)*0.5;
+//     }
+
+//     return -1;
+// }
+
+Vector<double> FD1Solver::u_values_at_cell_edges(Vector<int> j)
 {
-    Vector<int> jp;
-    Vector<int> jm;
-    jp = j + (1-dir)*x + dir*y;
-    jm = j + (dir-1)*x + (-dir)*y;
+  Vector<double> values(4*m_spaceDimension);
+  Vector<int> jp(m_spaceDimension);
+  Vector<int> jm(m_spaceDimension);
 
-    if(p == lft)
+  for(int d=0;d<m_spaceDimension;d++)
     {
-        if(b == lower) return un(jm) + m_deltaX[dir]*three_pts_derivative(jm,dir)*0.5;
-        if(b == upper) return un(j) - m_deltaX[dir]*three_pts_derivative(j,dir)*0.5;
-    }
-    if(p == rght)
-    {
-        if(b == lower) return un(j) + m_deltaX[dir]*three_pts_derivative(j,dir)*0.5;
-        if(b == upper) return un(jp) - m_deltaX[dir]*three_pts_derivative(jp,dir)*0.5;
-    }
+      jp = j + (1-d)*x + d*y;
+      jm = j + (d-1)*x + (-d)*y;
 
-    return -1;
+      values[4*d] = un(jm) + m_deltaX[d]*three_pts_derivative(jm,d)*0.5;//un-1/2-
+      values[4*d+1] = un(j) - m_deltaX[d]*three_pts_derivative(j,d)*0.5;//un-1/2+
+      values[4*d+2] = un(j) + m_deltaX[d]*three_pts_derivative(j,d)*0.5;//un+1/2-
+      values[4*d+3] = un(jp) - m_deltaX[d]*three_pts_derivative(jp,d)*0.5;;//un+1/2+
+    }
+  return values;
 }
 
 void FD1Solver::compute_intermediate_un_values()
@@ -140,20 +159,22 @@ void FD1Solver::compute_intermediate_un_values()
     }
 
     Vector<int> p;
-    for(int dir=0;dir<m_spaceDimension;dir++)
-    {
+    Vector<double> cellEdges;
         for(int j=0;j<m_nxSteps[0];j++)
         {
             for(int k=0;k<m_nxSteps[1];k++)
             {
                 p[0] = j; p[1] = k;
-                upper_right_intermediate_un_values[dir](p) = intermediate_uxt_values(p,rght,upper,dir);
-                lower_right_intermediate_un_values[dir](p) = intermediate_uxt_values(p,rght,lower,dir);
-                upper_left_intermediate_un_values[dir](p) = intermediate_uxt_values(p,lft,upper,dir);
-                lower_left_intermediate_un_values[dir](p) = intermediate_uxt_values(p,lft,lower,dir);
+		cellEdges = u_values_at_cell_edges(p);
+		for(int d=0;d<m_spaceDimension;d++)
+		  {
+		    lower_left_intermediate_un_values[d](p) = cellEdges[4*d];
+		    upper_left_intermediate_un_values[d](p) = cellEdges[4*d+1];
+		    lower_right_intermediate_un_values[d](p) = cellEdges[4*d+2];
+		    upper_right_intermediate_un_values[d](p) = cellEdges[4*d+3];
+		  }
             }
         }
-    }
 }
 
 void FD1Solver::compute_localSpeed()
@@ -282,27 +303,10 @@ void FD1Solver::set_un(ScalarField Un)
 //the flux gradient may be infinite, if you take a too large time step.
 ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
 {
-  clock_t dt=clock();
     set_un(un);
-    dt = clock() - dt;
-    cout << "set un in " << dt << endl;
-
-    dt = clock();
     compute_intermediate_un_values();
-    dt = clock() - dt;
-    cout << "computed intermediate values in " << dt << endl;
-
-    dt = clock();
     compute_localSpeed();
-    dt = clock() - dt;
-    cout << "computed local speed in " << dt << endl;
-
- dt = clock();
     compute_numerical_convection_flux();
-    dt = clock() - dt;
-    cout << "computed convection flux in " << dt << endl;
-
- dt = clock();
     ScalarField flux_gradient(m_nxSteps);
     for(int j=0;j<m_nxSteps[0];j++) for(int k=0;k<m_nxSteps[1];k++) flux_gradient(j*x+k*y) = 0;
     for(int dir=0;dir<m_spaceDimension;dir++)
@@ -310,9 +314,6 @@ ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
         flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] + (-1)*left_convection_flux[dir] );
     }
     return flux_gradient;
-    dt = clock() - dt;
-    cout << "computed flux gradient in " << dt << endl;
-
 }
 
 double FD1Solver::un(Vector<int> j)

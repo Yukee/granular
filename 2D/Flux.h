@@ -20,9 +20,11 @@ class Flux
  public:
   Flux();
   Flux(int space_dimensions, int solved_dimensions);
-  virtual TensorField evaluate(VectorField u) = 0; 
-  virtual bool has_exact_jacobian();
-  virtual Vector<TensorField> evaluate_jacobian(VectorField u) = 0;
+  virtual TensorField evaluate(VectorField)=0; 
+  virtual bool has_exact_jacobian()=0;
+  virtual Vector<TensorField> evaluate_jacobian(VectorField)=0;
+  int get_space_dimensions();
+  int get_solved_dimensions();
 };
 
 #endif

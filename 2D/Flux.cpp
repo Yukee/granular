@@ -1,6 +1,6 @@
 #include "Flux.h"
 
-Flux::Flux() :  m_space_dimensions(2), m_solved_dimensions(1)
+Flux::Flux() :  m_space_dimensions(1), m_solved_dimensions(1)
 {
   m_evaluated_flux.resize(m_solved_dimensions);
   for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux[i].resize(m_space_dimensions);

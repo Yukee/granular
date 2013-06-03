@@ -5,10 +5,11 @@ using namespace std;
 
 ScalarField::ScalarField()
 {
-  m_r = Vector<int>(0);
+  m_r = Vector<int>(2,1);
   m_r_len = m_r.size();
-  m_data = 0;
-  m_data_len = 0;
+  m_data_len = 1;
+  m_data = new double[m_data_len];
+  m_data[0] = 0;
 }
 
 ScalarField::ScalarField(const ScalarField & u) : m_r(u.m_r), m_r_len(u.m_r_len), m_data_len(u.m_data_len)

@@ -1,9 +1,20 @@
 #include "Equation.h"
 
+Equation::Equation(const Equation & eq)
+{
+  std::cout << "Copy constructor is called." << std::endl;
+  *m_conv = *eq.m_conv;
+  *m_diff = *eq.m_diff;
+}
+
 Equation::~Equation()
 {
+  std::cout << "Destructor is called but can't deallocate memory :(" << std::endl;
+  /*
   if(m_conv) delete[] m_conv;
+  std::cout << "desallocated m_conv memory" << std::endl;
   if(m_diff) delete[] m_diff;
+  */
 }
 
 TensorField Equation::get_convectionFlux(VectorField u)

@@ -21,11 +21,13 @@ public :
 
   inline T & operator[](const unsigned int i) const
   {
+    if(i>=N) throw std::invalid_argument("In Vector::operator[] const");
     return m_data[i];
   }
 
   inline T & operator[](const unsigned int i)
   {
+    if(i>=N) throw std::invalid_argument("In Vector::operator[]");
     return m_data[i];
   }
 

@@ -16,9 +16,10 @@ protected:
   Flux *m_diff; //diffusion flux
 
 public:
-  Equation() {m_conv =  new ZeroFlux(1,1); m_diff = new ZeroFlux(1,1);}
- Equation(Flux *f) : m_conv(f) {m_diff = new ZeroFlux(f->get_space_dimensions(),f->get_solved_dimensions());}
+  Equation() {m_conv =  new ZeroFlux(2,2); m_diff = new ZeroFlux(2,2);}
+  Equation(Flux *f) : m_conv(f) {m_diff = new ZeroFlux(f->get_space_dimensions(),f->get_solved_dimensions());}
   Equation(Flux *f, Flux *diff) : m_conv(f), m_diff(diff){}
+  Equation(const Equation &);
   ~Equation();
   TensorField get_convectionFlux(VectorField);
   Vector<TensorField> get_convectionFluxJacobian(VectorField);

@@ -1,0 +1,365 @@
+#include "FD1Solver.h"
+#include <math.h>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, boundaryConditions bc, Flux *bs, Vector<double> lowerLeftCorner) :
+   m_deltaX(deltaX), m_xInterval(xInterval), m_eq(eq), m_bc(bc), m_bs(bs), m_lowerLeftCorner(lowerLeftCorner)
+{
+  // Gets the dimensions of the problem
+  m_m = m_eq->get_solved_dimensions();
+  m_n = m_eq->get_space_dimensions();
+
+  // Gets the base vectors of the physical space
+  m_b = (Vector<int> (m_n) ).get_base_vectors(0,1);
+
+  // Computes the dimensions of each finite-volume cell
+  m_nxSteps.resize(m_n);
+  for(int i=0;i<m_n;i++) m_nxSteps[i] = m_xInterval[i]/m_deltaX[i];
+
+  // Computes the value of the position field at grid points
+  m_position.resize(m_n);
+  Vector<int> id(m_n,1); // (1,1,..1) vector
+  for(int dir=0;dir<m_n;dir++) m_position[dir].resize_field(m_nxSteps+2*id);
+  if(lowerLeftCorner.size() != m_n) throw invalid_argument("lowerLeftCorner dimension is not equal to the space dimension");
+  Vector<int> pIt;
+  for(int dir=0;dir<m_n;dir++) 
+    {
+      for(int it=0;it<m_position[dir].size();++it)
+	{
+	  pIt = m_position[dir].get_pos(it);
+	  m_position[dir][it] = m_lowerLeftCorner[dir] + m_deltaX[dir]*(pIt[dir] - m_b[dir]);//shift of j and k since we use extended BC;m_position(j,k) returns position at the point j-1,k-1 of the grid
+	}
+    }
+
+  // Computes the value of the boundaries field at grid points
+  m_test_boundaries = m_bs->evaluate(m_position);
+
+  // Crops the position field to fit in the integration domain
+  resize_pos();
+
+  // Sets the ranges of the various computation used fields
+  upper_right_intermediate_un_values.resize(m_m);
+  lower_right_intermediate_un_values.resize(m_m);
+  upper_left_intermediate_un_values.resize(m_m);
+  lower_left_intermediate_un_values.resize(m_m);
+
+  right_localSpeed[i].resize(m_m);
+  left_localSpeed[i].resize(m_m);
+
+  right_convection_flux[i].resize(m_m);
+  left_convection_flux[i].resize(m_m);
+
+  for(int i=0;i<m_m;i++)
+    {
+      upper_right_intermediate_un_values[i].resize(m_n);
+      lower_right_intermediate_un_values[i].resize(m_n);
+      upper_left_intermediate_un_values[i].resize(m_n);
+      lower_left_intermediate_un_values[i].resize(m_n);
+
+      right_localSpeed[i].resize(m_n);
+      left_localSpeed[i].resize(m_n);
+
+      right_convection_flux[i].resize(m_n);
+      left_convection_flux[i].resize(m_n);
+    }
+
+}
+
+FD1Solver::~FD1Solver()
+{
+    if(m_eq) delete m_eq;
+    if(m_bs) delete m_bs;
+}
+
+double FD1Solver::check_CFL(double deltaT)
+{
+    double newDeltaT = deltaT;
+    Vector<ScalarField> waveSpeed(m_n);
+    Vector<double> maxFrequency(m_n);
+    double overallMaxFreq=0;
+    for(int dir=0;dir<m_n;dir++)
+    {
+        waveSpeed[dir] = right_localSpeed[dir].max_field(left_localSpeed[dir]);
+        maxFrequency[dir] = waveSpeed[dir].get_max()/m_deltaX[dir];
+        if(maxFrequency[dir]>overallMaxFreq) overallMaxFreq = maxFrequency[dir];
+    }
+    if(newDeltaT>1/(8*overallMaxFreq)) newDeltaT = 1/(9*overallMaxFreq);
+    return newDeltaT;
+}
+
+double FD1Solver::minmod(double a, double b)
+{
+  double minmod;
+  if(a*b<=0) minmod = 0;
+  else
+    {
+      if(a>0) minmod = min(a,b);
+      else minmod = max(a,b);
+    }
+  return minmod;
+}
+
+double FD1Solver::three_pts_derivative(Vector<int> j, int dir)
+{
+  double deriv;
+    Vector<int> jp;
+    Vector<int> jm;
+    jp = j + (1-dir)*x + dir*y; //translation along the x axis if dir=0, along y axis if dir=1
+    jm = j + (dir-1)*x + (-dir)*y;
+
+    //bc TODO replace that by a second layer of un in set_un, and don't forget to shift by 2*(x+y) un(Vector<int>)
+    if(m_bc == periodic)
+    {
+        if(jm[0]==-2) jm[0]+=m_nxSteps[0];
+        if(jm[1]==-2) jm[1]+=m_nxSteps[1];
+        if(jp[0]==m_nxSteps[0]+1) jp[0]-=m_nxSteps[0];
+        if(jp[1]==m_nxSteps[1]+1) jp[1]-=m_nxSteps[1];
+    }
+
+    else
+    {
+        if(jm[0]==-2) return (un(jp) - un(j))/m_deltaX[dir];
+        if(jm[1]==-2) return (un(jp) - un(j))/m_deltaX[dir];
+        if(jp[0]==m_nxSteps[0]+1) return (un(j) - un(jm))/m_deltaX[dir];
+        if(jp[1]==m_nxSteps[1]+1) return (un(j) - un(jm))/m_deltaX[dir];
+    }
+
+    deriv = minmod( (un(j) - un(jm))/m_deltaX[dir], (un(jp) - un(j))/m_deltaX[dir] );
+    return deriv;
+}
+
+// double FD1Solver::intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int dir)
+// {
+//     Vector<int> jp;
+//     Vector<int> jm;
+//     jp = j + (1-dir)*x + dir*y;
+//     jm = j + (dir-1)*x + (-dir)*y;
+
+//     if(p == lft)
+//     {
+//         if(b == lower) return un(jm) + m_deltaX[dir]*un_derivative[dir](jm)*0.5;
+//         if(b == upper) return un(j) - m_deltaX[dir]*un_derivative[dir](j)*0.5;
+//     }
+//     if(p == rght)
+//     {
+//         if(b == lower) return un(j) + m_deltaX[dir]*un_derivative[dir](j)*0.5;
+//         if(b == upper) return un(jp) - m_deltaX[dir]*un_derivative[dir](jp)*0.5;
+//     }
+
+//     return -1;
+// }
+
+Vector<double> FD1Solver::u_values_at_cell_edges(Vector<int> j)
+{
+  Vector<double> values(4*m_n);
+  Vector<int> jp(m_n);
+  Vector<int> jm(m_n);
+
+  for(int d=0;d<m_n;d++)
+    {
+      jp = j + (1-d)*x + d*y;
+      jm = j + (d-1)*x + (-d)*y;
+
+      values[4*d] = un(jm) + m_deltaX[d]*three_pts_derivative(jm,d)*0.5;//un-1/2-
+      values[4*d+1] = un(j) - m_deltaX[d]*three_pts_derivative(j,d)*0.5;//un-1/2+
+      values[4*d+2] = un(j) + m_deltaX[d]*three_pts_derivative(j,d)*0.5;//un+1/2-
+      values[4*d+3] = un(jp) - m_deltaX[d]*three_pts_derivative(jp,d)*0.5;;//un+1/2+
+    }
+  return values;
+}
+
+void FD1Solver::compute_intermediate_un_values()
+{
+    for(int dir=0;dir<m_n;dir++)
+    {
+        upper_right_intermediate_un_values[dir].resize_field(m_nxSteps);
+        lower_right_intermediate_un_values[dir].resize_field(m_nxSteps);
+        upper_left_intermediate_un_values[dir].resize_field(m_nxSteps);
+        lower_left_intermediate_un_values[dir].resize_field(m_nxSteps);
+    }
+
+    Vector<int> p;
+    Vector<double> cellEdges;
+        for(int j=0;j<m_nxSteps[0];j++)
+        {
+            for(int k=0;k<m_nxSteps[1];k++)
+            {
+                p[0] = j; p[1] = k;
+		cellEdges = u_values_at_cell_edges(p);
+		for(int d=0;d<m_n;d++)
+		  {
+		    lower_left_intermediate_un_values[d](p) = cellEdges[4*d];
+		    upper_left_intermediate_un_values[d](p) = cellEdges[4*d+1];
+		    lower_right_intermediate_un_values[d](p) = cellEdges[4*d+2];
+		    upper_right_intermediate_un_values[d](p) = cellEdges[4*d+3];
+		  }
+            }
+        }
+}
+
+void FD1Solver::compute_localSpeed()
+{
+    ScalarField lowerSpeed;
+    ScalarField upperSpeed;
+    //Modify here if you want to use implicit definition of the jacobian
+
+    for(int dir=0;dir<m_n;dir++)
+    {
+        upperSpeed = m_eq->get_convectionFluxJacobian(upper_right_intermediate_un_values[dir])[dir];
+        lowerSpeed = m_eq->get_convectionFluxJacobian(lower_right_intermediate_un_values[dir])[dir];
+        right_localSpeed[dir] = upperSpeed.max_field(lowerSpeed);
+
+        upperSpeed = m_eq->get_convectionFluxJacobian(upper_left_intermediate_un_values[dir])[dir];
+        lowerSpeed = m_eq->get_convectionFluxJacobian(lower_left_intermediate_un_values[dir])[dir];
+        left_localSpeed[dir] = upperSpeed.max_field(lowerSpeed);
+    }
+}
+
+void FD1Solver::compute_numerical_convection_flux()
+{
+    //no particular bc on the flux?
+    ScalarField upperFlux;
+    ScalarField lowerFlux;
+
+    for(int dir=0;dir<m_n;dir++)
+    {
+        upperFlux = m_eq->get_convectionFlux(upper_right_intermediate_un_values[dir])[dir];
+        lowerFlux = m_eq->get_convectionFlux(lower_right_intermediate_un_values[dir])[dir];
+        right_convection_flux[dir] = 0.5*(upperFlux + lowerFlux) + (-0.5)*right_localSpeed[dir]*(upper_right_intermediate_un_values[dir] + (-1)*lower_right_intermediate_un_values[dir]);
+
+        upperFlux = m_eq->get_convectionFlux(upper_left_intermediate_un_values[dir])[dir];
+        lowerFlux = m_eq->get_convectionFlux(lower_left_intermediate_un_values[dir])[dir];
+        left_convection_flux[dir] = 0.5*(upperFlux + lowerFlux) + (-0.5)*left_localSpeed[dir]*(upper_left_intermediate_un_values[dir] + (-1)*lower_left_intermediate_un_values[dir]);
+    }
+}
+
+// Resizes un so that it can take values at the boundaries
+void FD1Solver::set_un(ScalarField Un)
+{
+    Vector<int> rBc; rBc = m_nxSteps + 2*(x+y);
+    m_un.resize_field(rBc);
+
+  m_un.resize(m_m);
+  Vector<int> id(m_n,1); // (1,1,..1) vector
+  for(int i=0;i<m_m;i++) m_un[i].resize_field(m_nxSteps+2*id);
+
+  // Sets m_un to be equal to Un inside the domain
+  for(int i=0;i<m_m;i++)
+    {
+      for(int it=0;i<Un[i].size();++it)
+	{
+	  m_un[i]( Un.get_pos(it)+id ) = un[i][it];
+	}
+    }
+
+
+  if(m_bc == null)
+   {
+     m_un = m_test_boundaries*m_un;
+   }
+
+    if(m_bc == prescribedWestAndSouth)
+    {
+        //assuming 2D
+        for(int j=1;j<m_nxSteps[0]+2;j++)
+        {
+            for(int k=1;k<m_nxSteps[1]+2;k++)
+            {
+                //assuming that test_boundaries is written with supplementary borders (same as m_un)
+                if(m_test_boundaries(j*x+k*y)==0) m_un(j*x+k*y) = 0;
+                else
+                {
+                    if(j==0 || k==0) throw invalid_argument("In FD1Solver::set_un: boundary surface is on the rectangular integration domain; it should be strictly inside, except on the west and south sides of the rectangle");
+                    m_un(j*x+k*y) = Un((j-1)*x + (k-1)*y);
+                }
+            }
+        }
+
+        for(int k=1;k<m_nxSteps[1]+1;k++)
+        {
+            if(uWest.size()!=m_nxSteps[1]) throw invalid_argument("In FD1Solver::set_un: field value on the west boundary should have as many elements as the number of vertical steps. Perhaps have you forgot to set uWest?");
+            m_un(k*y) = uWest[k-1];
+        }
+        m_un(0*y) = 0; m_un((m_nxSteps[1]+1)*y) = 0;//Actually we don't even have to set this values since they won't be used
+
+        for(int j=1;j<m_nxSteps[0]+1;j++)
+        {
+            if(uSouth.size()!=m_nxSteps[0]) throw invalid_argument("In FD1Solver::set_un: field value on the south boundary should have as many elements as the number of horizontal steps. Perhaps have you forgot to set uSouth?");
+            m_un(j*x) = uSouth[j-1];
+        }
+        m_un((m_nxSteps[0]+1)*x) = 0;
+    }
+
+    if(m_bc == periodic)
+    {
+        Vector<int> p1; Vector<int> p2;
+        for(int dir=0;dir<2;dir++)
+        {
+            p1=0*p1;
+            p2 = m_nxSteps + (-1)*(x+y);
+            for(int i=1;i<m_nxSteps[dir]+1;i++)
+            {
+                p1[dir] = i; p2[dir] = i-1;
+                m_un(p1) = Un(p2);
+            }
+        }
+
+        for(int j=1;j<m_nxSteps[0]+1;j++) for(int k=1;k<m_nxSteps[1]+1;k++)
+        {
+            m_un(j*x + k*y) = Un((j-1)*x + (k-1)*y);
+        }
+
+        for(int dir=0;dir<2;dir++)
+        {
+            p1 = m_nxSteps + (x+y);
+            p2=0*p2;
+            for(int i=1;i<m_nxSteps[dir]+1;i++)
+            {
+                p1[dir] = i; p2[dir]=i-1;
+                m_un(p1) = Un(p2);
+            }
+        }
+    }
+}
+
+//the flux gradient may be infinite, if you take a too large time step.
+ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
+{
+    set_un(un);
+    compute_intermediate_un_values();
+    compute_localSpeed();
+    compute_numerical_convection_flux();
+    ScalarField flux_gradient(m_nxSteps);
+    for(int j=0;j<m_nxSteps[0];j++) for(int k=0;k<m_nxSteps[1];k++) flux_gradient(j*x+k*y) = 0;
+    for(int dir=0;dir<m_n;dir++)
+    {
+      flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] - left_convection_flux[dir] );
+    }
+    flux_gradient = flux_gradient - m_eq->get_sourceTerm(m_un);
+    return flux_gradient;
+}
+
+double FD1Solver::un(Vector<int> j)
+{
+  return m_un(j+x+y);
+}
+
+
+void FD1Solver::resize_pos()
+{
+  m_resizedPos.resize(m_n);
+  for(int dir=0;dir<m_n;dir++) m_resizedPos[dir].resize_field(m_nxSteps);
+
+  Vector<int> pIt;
+  for(int dir=0;dir<m_n;dir++) 
+    {
+      for(int it=0;it<m_resizedPos[dir].size();++it)
+	{
+	  pIt = m_resizedPos[dir].get_pos(it);
+	  m_resizedPos[dir][it] = m_lowerLeftCorner[dir] + m_deltaX[dir]*pIt[dir];
+	}
+    }
+}

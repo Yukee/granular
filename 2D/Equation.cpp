@@ -28,3 +28,13 @@ TensorField Equation::get_diffusionFlux(VectorField u)
 {
   return m_diff->evaluate(u);
 }
+
+int Equation::get_space_dimensions()
+{
+  return m_space_dimensions;
+}
+
+int Equation::get_solved_dimensions()
+{
+  return m_solved_dimensions;
+}

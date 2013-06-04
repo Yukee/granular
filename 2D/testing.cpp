@@ -43,9 +43,18 @@ int main()
   Equation NSEq(f);
   for(int dim=0;dim<d;dim++) 
     {
-      cout << "Jacobian of the flux " << dim << ":" << endl;
       for(int i=0;i<d;i++) for(int j=0;j<d;j++) cout <<NSEq.get_diffusionFlux(u)[i][j]<< endl;
     }
 
+  ScalarField a(Vector<int> (2,2));
+  Vector<int> y(2); y[0] = 1; y[1] = 0;
+  Vector<int> z(2); z[0] = 0; z[1] = 1;
+  for(int i=0;i<2;i++) for(int j=0;j<2;j++) a(i*y+j*z) = i+j;
+  cout << a;
+  for(int d=0;d<a.get_size();d++)
+    {
+      a[d] = a.get_pos(d)[0] + a.get_pos(d)[1];
+    }
+  cout << a;
   return 0;
 }

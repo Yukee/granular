@@ -9,12 +9,8 @@ Equation::Equation(const Equation & eq)
 
 Equation::~Equation()
 {
-  std::cout << "Destructor is called but can't deallocate memory :(" << std::endl;
-  /*
-  if(m_conv) delete[] m_conv;
-  std::cout << "desallocated m_conv memory" << std::endl;
-  if(m_diff) delete[] m_diff;
-  */
+  if(m_conv) delete m_conv;
+  if(m_diff) delete m_diff;
 }
 
 TensorField Equation::get_convectionFlux(VectorField u)

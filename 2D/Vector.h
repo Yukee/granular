@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <stdexcept>
+#include <ostream>
 
 template <class T=int>
 class Vector
@@ -80,8 +81,21 @@ public :
     return temp;
   }
 
+inline friend std::ostream & operator<<(std::ostream & stream, const Vector<T> & right)
+{
+  for(unsigned int i=0;i<right.N;i++)
+    {
+      stream << right.m_data[i] << "\t";
+      if((i+1)%5==0) stream << std::endl; // writes in lines of 5 components
+    }
+  stream << std::endl;
+  return stream;
+}
+
   unsigned int size() const;
-  Vector< Vector<T> > get_base_vectors(const T, const T);
+
+  Vector< Vector<T> > get_base_vectors(const T additiveIdentity, const T multiplicativeIdentity);
+
   void resize(const unsigned int n);
 
 private :
@@ -141,8 +155,8 @@ Vector< Vector<T> > Vector<T>::get_base_vectors(const T additiveIdentity, const 
     {
       for(unsigned int i=0;i<N;i++)
 	{
-	  if(i==d) tempElement[i] = multiplicativeIdentity;
-	  else tempElement[i] = additiveIdentity;
+	  if(i==d) tempElement[i] = additiveIdentity;
+	  else tempElement[i] = multiplicativeIdentity;
 	}
       basis[d] = tempElement;
     }

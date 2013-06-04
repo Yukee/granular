@@ -3,6 +3,8 @@
 #include <math.h>
 using namespace std;
 
+#define DEBUG
+
 ScalarField::ScalarField()
 {
   m_r = Vector<int>(2,1);
@@ -179,6 +181,12 @@ double & ScalarField::operator()(const Vector<int> & component)
     }
     return m_data[element];
 }
+double & ScalarField::operator[](const int & i)
+{
+  if((unsigned int)i>=m_data_len) throw invalid_argument("In ScalarField::operator[]");
+  return m_data[i];
+}
+
 
 ScalarField ScalarField::max_field(const ScalarField u) const
 {
@@ -220,6 +228,9 @@ void ScalarField::resize_field(Vector<int> range)
 
 Vector<int> ScalarField::get_pos(int i) const
 {
+#ifdef DEBUG
+  if((unsigned int)i>=m_data_len) throw invalid_argument("In ScalarField::get_pos(int)");
+#endif
   Vector<int> p(m_r_len);
     int tempI=i;
     p[0] = i%m_r[0];

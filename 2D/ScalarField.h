@@ -39,14 +39,14 @@ public:
     friend ScalarField operator*(const double &, const ScalarField &);
     friend ScalarField operator*(const ScalarField &, const ScalarField &);
     friend ScalarField operator/(const ScalarField &, const ScalarField &);
-    double & operator()(const Vector<int> & component);
+    virtual double & operator()(const Vector<int> & component);
     double & operator[](const int &);
     ScalarField max_field(const ScalarField) const;
     double get_max() const;
     void write_in_file(std::ostream & output, const Vector<double> deltaX, const Vector<double> lowerLeftCorner);
     Vector<int> get_pos(int) const;//retrieves the Position of the ith element of m_data
 
-private:
+protected:
     Vector<int> m_r;//has as much components as the number of dimensions of the space, each component is the number of points in a direction of the space
     unsigned int m_r_len;//lenght of the m_r array; corresponds to the dimension of the space where the field lives
     double *m_data;

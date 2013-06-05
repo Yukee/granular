@@ -14,6 +14,8 @@
 //#include "RK2Solver.h"
 //#include "RK3Solver.h"
 #include "ScalarField.h"
+#include "PeriodicField.h"
+#include "NullField.h"
 
 using namespace std;
 int main()
@@ -56,5 +58,28 @@ int main()
       a[d] = a.get_pos(d)[0] + a.get_pos(d)[1];
     }
   cout << a;
+
+  cout << "********Periodic and null fields test area************" << endl;
+  ScalarField *ptr = 0;
+
+  PeriodicField pf(Vector<int> (3,2));
+  ptr = &pf;
+  for(int it=0;it<ptr->get_size();++it) (*ptr)[it] = ptr->get_pos(it)[0] + ptr->get_pos(it)[1] + ptr->get_pos(it)[2];
+  cout << (*ptr) << endl;
+  Vector< Vector<int> > b = (Vector<int> (3)).get_base_vectors(1,0);
+  int n = 3;
+  for(int i=0;i<n;i++) for(int j=0;j<n;j++) for(int k=0;k<n;k++){
+	cout << i << j << k << (*ptr)(i*b[0]+j*b[1]+k*b[2]) << endl; // no runtime error: the periodic field re-ranges the position
+      }
+
+  NullField nf(Vector<int> (2,2));
+  ptr = &nf;
+  for(int it=0;it<ptr->get_size();++it) (*ptr)[it] = 1;
+  cout << (*ptr)(Vector<int> (2,2)); // no runtime error: the null field is 0 outside its range
+
+  ScalarField sf(Vector<int> (2,2));
+  ptr = &sf;
+  //cout << (*ptr)(Vector<int> (2,2)) << endl; // runtime error: you are outside the range of the field
+
   return 0;
 }

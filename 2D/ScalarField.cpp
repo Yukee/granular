@@ -167,10 +167,10 @@ ScalarField operator*(const ScalarField & u, const ScalarField & v)
 double & ScalarField::operator()(const Vector<int> & component)
 {
 #ifdef DEBUG
-    if(component.size() != m_r_len) throw invalid_argument("In operator(): dimension differs from the field dimension");
+    if(component.size() != m_r_len) throw invalid_argument("In ScalarField::operator(): dimension differs from the field dimension");
     bool within_ranges = 1;
     for(unsigned int i=0; i<m_r_len; i++) within_ranges*=( (component[i] < m_r[i]) && (component[i] >= 0) );
-    if(!within_ranges) throw invalid_argument("In operator(): component(s) are outside the ranges of the field");
+    if(!within_ranges) throw invalid_argument("In ScalarField::operator(): component(s) are outside the ranges of the field");
 #endif // DEBUG
 
     int element = component[m_r_len-1];

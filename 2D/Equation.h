@@ -28,7 +28,7 @@ public:
   Equation(Flux *f, Flux *diff) : m_conv(f), m_diff(diff){
     m_space_dimensions = m_conv->get_space_dimensions();
     m_solved_dimensions = m_conv->get_solved_dimensions();
-    if( m_space_dimensions != m_diff->get_space_dimensions() || m_solved_dimensions =! m_diff->get_solved_dimensions())
+    if( m_space_dimensions != m_diff->get_space_dimensions() || m_solved_dimensions != m_diff->get_solved_dimensions())
       throw std::invalid_argument("In Equation(Flux*,Flux*) convective and diffusive fluxes have different dimensions");}
 
   Equation(const Equation &);

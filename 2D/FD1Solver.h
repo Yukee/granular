@@ -4,46 +4,26 @@
 #include "Equation.h"
 #include "Vector.h"
 #include "ScalarField.h"
+#include "PeriodicField.h"
 
 enum grid_position {lft, rght};
 enum bound {lower, upper};
-enum boundaryConditions {periodic, null, prescribedWestAndSouth};
 
 class FD1Solver
 {
 public:
-    FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, boundaryConditions bc, Flux *bs, Vector<double> lowerLeftCorner);
+    FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, Flux *bs, Vector<double> lowerLeftCorner);
 
-    ScalarField get_numerical_flux_gradient(ScalarField un);
+    VectorField get_numerical_flux_gradient(VectorField un);
 
     inline VectorField get_position()
     {
         return m_position;
     }
 
-    inline VectorField get_resized_position()
-    {
-        return m_resizedPos;
-    }
-
     double check_CFL(double deltaT);
 
     ~FD1Solver();
-    void set_un(ScalarField un);
-    inline void set_uWest(Vector<double> uw)
-    {
-        uWest = uw;
-    }
-
-    inline void set_uSouth(Vector<double> us)
-    {
-        uSouth = us;
-    }
-
-    inline ScalarField get_test_boundaries()
-    {
-        return m_test_boundaries;
-    }
 
     inline Vector<double> get_deltaX()
     {
@@ -55,18 +35,13 @@ public:
         return m_lowerLeftCorner;
     }
 
-    inline VectorField get_speed_field()
-    {
-        return m_eq->get_speed_field();
-    }
-
-    inline VectorField get_flux_jacobian(ScalarField u0)
+    inline Vector<TensorField> get_flux_jacobian(VectorField u0)
     {
         get_numerical_flux_gradient(u0);
         return m_eq->get_convectionFluxJacobian(upper_right_intermediate_un_values[0]);
     }
 
-    inline ScalarField get_initial_field(ScalarField u0)
+    inline VectorField get_initial_field(VectorField u0)
     {
         get_numerical_flux_gradient(u0);
         return m_un;
@@ -81,40 +56,38 @@ private:
     Vector<double> m_deltaX;
     Vector<double> m_xInterval;
     Equation *m_eq;
-    boundaryConditions m_bc;
     Flux *m_bs;
     Vector<double> m_lowerLeftCorner;
-    ScalarField m_test_boundaries;//the evalutation of m_bs over all positions m_position
     Vector<int> m_nxSteps;
 
     VectorField m_position;
-    VectorField m_resizedPos;
 
     VectorField m_un;
 
     TensorField left_convection_flux;
     TensorField right_convection_flux;
-    TensorField upper_right_intermediate_un_values;//un values cell boundary
+    TensorField left_diffusion_flux;
+    TensorField right_diffusion_flux;
+
+    TensorField un_derivatives;
+    TensorField upper_right_intermediate_un_values;
     TensorField lower_right_intermediate_un_values;
     TensorField upper_left_intermediate_un_values;
     TensorField lower_left_intermediate_un_values;
-    TensorField right_localSpeed;
-    TensorField left_localSpeed;
 
-    Vector<double> u_values_at_cell_edges(Vector<int> j);
+    VectorField right_localSpeed;
+    VectorField left_localSpeed;
+
+    void compute_un_derivatives();
     void compute_intermediate_un_values();
     void compute_localSpeed();
     void compute_numerical_convection_flux();
+    void compute_numerical_diffusion_flux();
     double minmod(double a, double b);
-    double three_pts_derivative(Vector<int> j, int direction); //du/dx at point j in the x or y direction
-    // double intermediate_uxt_values(Vector<int> j, grid_position p, bound b, int direction); //un(+-)(j+-1/2) at point j in the x or y direction
-    double un(Vector<int> j);
-    void resize_pos();//compute a position vector m_resizedPos with non extended BC
+    double three_pts_derivative(Vector<int> j, int d, int i); //du/dx at point j in the x or y direction
 
-    //For the prescribed boundary case
-    Vector<double> uWest;
-    Vector<double> uSouth;
-
+    // caca
+    ScalarField unity;
 };
 
 

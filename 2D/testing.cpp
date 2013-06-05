@@ -81,5 +81,18 @@ int main()
   ptr = &sf;
   //cout << (*ptr)(Vector<int> (2,2)) << endl; // runtime error: you are outside the range of the field
 
+  cout << "******** Initialization test area ****************" << endl;
+  int m_m = 3;
+  int m_n = 4;
+  VectorField vect(m_m, ScalarField (Vector<int> (3,2)));
+  cout << vect.size() << "\t" << vect[2].get_range() << endl;
+
+  TensorField tens(m_m, VectorField (m_n, ScalarField (Vector<int> (4,2))));
+  cout << tens.size() << "\t" << tens[0].size() << "\t" << tens[0][0].get_range() << endl;
+
+  VectorField vect2;
+  vect2 =  VectorField (m_m, ScalarField (Vector<int> (3,2)));
+  cout << vect.size() << "\t" << vect[2].get_range() << endl;
+
   return 0;
 }

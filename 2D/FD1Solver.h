@@ -47,6 +47,11 @@ public:
         return m_un;
     }
 
+    inline PeriodicField get_unity()
+    {
+      return unity;
+    }
+
 private:
     int m_m; //number of solved dimensions
     int m_n; //number of space dimensions

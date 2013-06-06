@@ -9,8 +9,8 @@
 #include "NSFlux.h"
 #include "Equation.h"
 #include "FD1Solver.h"
-//#include "timeSolver.h"
-//#include "EulerSolver.h"
+#include "timeSolver.h"
+#include "EulerSolver.h"
 //#include "RK2Solver.h"
 //#include "RK3Solver.h"
 #include "PeriodicField.h"
@@ -96,13 +96,21 @@ int main()
 
 
   cout << "****************** Solver test area *******************" << endl;
-  Vector<double> dx(2,0.1); Vector<double> xI(2,1); Vector<double> lfc(2,0);
+  int dim = 1;
+  Vector<double> dx(dim,0.1); Vector<double> xI(dim,2*M_PI); Vector<double> lfc(dim,0);
   Flux *bf = new Burgers1D();
-  Flux *nsf = new NSFlux(2);
-  Equation *eq = new Equation(nsf);
+  Equation *eq = new Equation(bf);
   FD1Solver sol(dx, xI, eq, lfc);
 
-  cout << sol.get_position() << endl;
+  double dt = 0.1; double T = 2;
+  Vector<int> xr (dim); for(int d=0;d<dim;d++) xr[d] = xI[d]/dx[d];
+  VectorField pos = sol.get_position();
+  VectorField u0 (1, PeriodicField (xr) );
+  for(int d=0;d<dim;d++) for(int it=0;it<u0[d].get_size();++it)
+			   u0[d][it] = cos(pos[d][it]);
+  timeSolver *tse = new EulerSolver(dt, T, sol, u0);
+
+  cout << pos << endl;
 
   return 0;
 }

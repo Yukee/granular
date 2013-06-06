@@ -18,7 +18,9 @@ protected:
   int m_solved_dimensions;
 
 public:
-  Equation() {m_conv =  new ZeroFlux(2,2); m_diff = new ZeroFlux(2,2);}
+  Equation() {m_conv =  new ZeroFlux(1,1); m_diff = new ZeroFlux(1,1);
+    m_space_dimensions = m_conv->get_space_dimensions();
+    m_solved_dimensions = m_conv->get_solved_dimensions();}
 
   Equation(Flux *f) : m_conv(f) {
     m_space_dimensions = m_conv->get_space_dimensions();

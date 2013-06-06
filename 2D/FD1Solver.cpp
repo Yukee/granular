@@ -13,7 +13,7 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
   m_n = m_eq->get_space_dimensions();
 
   // Gets the base vectors of the physical space
-  m_b = ( Vector<int> (m_n) ).get_base_vectors(0,1);
+  m_b = ( Vector<int> (m_n) ).get_base_vectors(1,0);
 
   // Computes the dimensions of each finite-volume cell
   m_nxSteps.resize(m_n);
@@ -56,6 +56,7 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
 FD1Solver::~FD1Solver()
 {
     if(m_eq) delete m_eq;
+    m_eq = NULL;
 }
 
 double FD1Solver::check_CFL(double deltaT)
@@ -204,7 +205,7 @@ VectorField FD1Solver::get_numerical_flux_gradient(VectorField un)
     {
       flux_gradient = flux_gradient 
 	+ ((1./m_deltaX[d])*unity)*( right_convection_flux[d] - left_convection_flux[d] 
-			     - right_diffusion_flux[d] + left_diffusion_flux[d] );
+				     - right_diffusion_flux[d] + left_diffusion_flux[d] );
     }
 
   return flux_gradient;

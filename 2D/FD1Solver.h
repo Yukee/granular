@@ -52,6 +52,11 @@ public:
       return unity;
     }
 
+    inline Vector< Vector<int> > get_b()
+    {
+      return m_b;
+    }
+
 private:
     int m_m; //number of solved dimensions
     int m_n; //number of space dimensions

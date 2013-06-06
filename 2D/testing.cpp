@@ -72,37 +72,15 @@ int main()
 	cout << i << j << k << (*ptr)(i*b[0]+j*b[1]+k*b[2]) << endl; // no runtime error: the periodic field re-ranges the position
       }
 
-  NullField nf(Vector<int> (2,2));
-  ptr = &nf;
-  for(int it=0;it<ptr->get_size();++it) (*ptr)[it] = 1;
-  cout << (*ptr)(Vector<int> (2,2)); // no runtime error: the null field is 0 outside its range
-
-  PeriodicField sf(Vector<int> (2,2));
-  ptr = &sf;
-  //cout << (*ptr)(Vector<int> (2,2)) << endl; // runtime error: you are outside the range of the field
-
-  cout << "******** Initialization test area ****************" << endl;
-  int m_m = 3;
-  int m_n = 4;
-  VectorField vect(m_m, PeriodicField (Vector<int> (3,2)));
-  cout << vect.size() << "\t" << vect[2].get_range() << endl;
-
-  TensorField tens(m_m, VectorField (m_n, PeriodicField (Vector<int> (4,2))));
-  cout << tens.size() << "\t" << tens[0].size() << "\t" << tens[0][0].get_range() << endl;
-
-  VectorField vect2;
-  vect2 =  VectorField (m_m, PeriodicField (Vector<int> (3,2)));
-  cout << vect.size() << "\t" << vect[2].get_range() << endl;
-
 
   cout << "****************** Solver test area *******************" << endl;
-  int dim = 2;
+  int dim = 1;
   Vector<double> dx(dim,0.1); Vector<double> xI(dim,2*M_PI); Vector<double> lfc(dim,0);
   Flux *bf = new NSFlux(dim);
-  Equation *eq = new Equation(bf);
+  Equation *eq = new Equation();
   FD1Solver sol(dx, xI, eq, lfc);
 
-  double dt = 0.001; double T = 2;
+  double dt = 0.0001; double T = 2;
   Vector<int> xr (dim); for(int d=0;d<dim;d++) xr[d] = xI[d]/dx[d];
   VectorField pos = sol.get_position();
   VectorField u0 (dim, PeriodicField (xr) );
@@ -110,7 +88,7 @@ int main()
   			   u0[d][it] = cos(pos[d][it]);
    EulerSolver tse(dt, T, &sol, u0);
 
-   tse.get_solution("caca1D");
+   tse.get_solution("caca");
 
   return 0;
 }

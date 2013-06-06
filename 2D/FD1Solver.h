@@ -86,7 +86,7 @@ private:
     double three_pts_derivative(Vector<int> j, int d, int i); //du/dx at point j in the x or y direction
 
     // caca
-    ScalarField unity;
+    PeriodicField unity;
 };
 
 

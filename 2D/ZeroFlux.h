@@ -21,7 +21,7 @@ class ZeroFlux : public Flux
     return m_evaluated_flux_d;
   }
 
-  inline ScalarField get_max_eigenvalue(VectorField u, int d)
+  inline PeriodicField get_max_eigenvalue(VectorField u, int d)
   {
     return 0*u[0];
   }

@@ -29,7 +29,7 @@ class NSFlux : public Flux
     return m_evaluated_flux_jacobian;
   }
 
-  inline ScalarField get_max_eigenvalue(VectorField u, int d)
+  inline PeriodicField get_max_eigenvalue(VectorField u, int d)
   {
     // max eigenvalue is 2*u, we want the module.
     return 2*u[d].module();

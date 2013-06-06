@@ -13,7 +13,7 @@
 //#include "EulerSolver.h"
 //#include "RK2Solver.h"
 //#include "RK3Solver.h"
-#include "ScalarField.h"
+#include "PeriodicField.h"
 #include "PeriodicField.h"
 #include "NullField.h"
 
@@ -22,7 +22,7 @@ int main()
 {
   // tests in a 42D space, with a system of 3 equations (ie a 3D vector field)
   Vector<int> R(42,1);
-  ScalarField s(R);
+  PeriodicField s(R);
   VectorField v(3,s);
   Flux *zero = new ZeroFlux(42,3);
   for(int d=0;d<42;d++) cout << (zero->evaluate(v)[d] == zero->evaluate(v,d) ) << endl;
@@ -30,7 +30,7 @@ int main()
   // Navier-Stokes in a 3D space
   int d = 3;
   Vector<int> x(d,1);
-  VectorField u(d, ScalarField (x));
+  VectorField u(d, PeriodicField (x));
   for(int i=0;i<d;i++) u[i](Vector<int> (d,0)) = 2;
   u[2](Vector<int> (d,0)) = 1;
   Flux *f = new NSFlux(d);
@@ -48,7 +48,7 @@ int main()
       for(int i=0;i<d;i++) for(int j=0;j<d;j++) cout <<NSEq.get_diffusionFlux(u,i)[j]<< endl;
     }
 
-  ScalarField a(Vector<int> (2,2));
+  PeriodicField a(Vector<int> (2,2));
   Vector<int> y(2); y[0] = 1; y[1] = 0;
   Vector<int> z(2); z[0] = 0; z[1] = 1;
   for(int i=0;i<2;i++) for(int j=0;j<2;j++) a(i*y+j*z) = i+j;
@@ -77,21 +77,21 @@ int main()
   for(int it=0;it<ptr->get_size();++it) (*ptr)[it] = 1;
   cout << (*ptr)(Vector<int> (2,2)); // no runtime error: the null field is 0 outside its range
 
-  ScalarField sf(Vector<int> (2,2));
+  PeriodicField sf(Vector<int> (2,2));
   ptr = &sf;
   //cout << (*ptr)(Vector<int> (2,2)) << endl; // runtime error: you are outside the range of the field
 
   cout << "******** Initialization test area ****************" << endl;
   int m_m = 3;
   int m_n = 4;
-  VectorField vect(m_m, ScalarField (Vector<int> (3,2)));
+  VectorField vect(m_m, PeriodicField (Vector<int> (3,2)));
   cout << vect.size() << "\t" << vect[2].get_range() << endl;
 
-  TensorField tens(m_m, VectorField (m_n, ScalarField (Vector<int> (4,2))));
+  TensorField tens(m_m, VectorField (m_n, PeriodicField (Vector<int> (4,2))));
   cout << tens.size() << "\t" << tens[0].size() << "\t" << tens[0][0].get_range() << endl;
 
   VectorField vect2;
-  vect2 =  VectorField (m_m, ScalarField (Vector<int> (3,2)));
+  vect2 =  VectorField (m_m, PeriodicField (Vector<int> (3,2)));
   cout << vect.size() << "\t" << vect[2].get_range() << endl;
 
 

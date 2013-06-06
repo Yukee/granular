@@ -27,7 +27,7 @@ class Burgers1D : public Flux
     return m_evaluated_flux_jacobian;
   }
 
-  inline ScalarField get_max_eigenvalue(VectorField u, int d)
+  inline PeriodicField get_max_eigenvalue(VectorField u, int d)
   {
     return u[0];
   }

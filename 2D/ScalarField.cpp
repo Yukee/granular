@@ -181,12 +181,12 @@ double & ScalarField::operator()(const Vector<int> & component)
     }
     return m_data[element];
 }
+
 double & ScalarField::operator[](const int & i)
 {
   if((unsigned int)i>=m_data_len) throw invalid_argument("In ScalarField::operator[]");
   return m_data[i];
 }
-
 
 ScalarField ScalarField::max_field(const ScalarField u) const
 {

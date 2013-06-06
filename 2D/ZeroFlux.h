@@ -11,8 +11,19 @@ class ZeroFlux : public Flux
 
   inline TensorField evaluate(VectorField u)
   {
-    for(int i=0;i<m_solved_dimensions;i++) for(int d=0;d<m_space_dimensions;d++) m_evaluated_flux[i][d] = 0*u[i];
+    for(int d=0;d<m_space_dimensions;d++) for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux[d][i] = 0*u[i];
     return m_evaluated_flux;
+  }
+
+  inline VectorField evaluate(VectorField u, int d)
+  {
+    for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux_d[i] = 0*u[i];
+    return m_evaluated_flux_d;
+  }
+
+  inline ScalarField get_max_eigenvalue(VectorField u, int d)
+  {
+    return 0*u[0];
   }
 
   inline Vector<TensorField> evaluate_jacobian(VectorField u)

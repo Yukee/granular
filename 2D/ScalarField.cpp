@@ -215,6 +215,12 @@ double ScalarField::get_max() const
     return maximum;
 }
 
+ScalarField ScalarField::module() const
+{
+  for(unsigned int it=0;it<m_data_len;++it) m_data[it] = max( m_data[it], -m_data[it] );
+  return *this;
+}
+
 void ScalarField::resize_field(Vector<int> range)
 {
     m_r_len = range.size();

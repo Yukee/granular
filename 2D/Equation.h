@@ -35,9 +35,10 @@ public:
 
   ~Equation();
 
-  TensorField get_convectionFlux(VectorField);
+  VectorField get_convectionFlux(VectorField,int);
   Vector<TensorField> get_convectionFluxJacobian(VectorField);
-  TensorField get_diffusionFlux(VectorField);
+  VectorField get_diffusionFlux(VectorField,int);
+  ScalarField get_max_eigenvalue(VectorField,int);
   int get_space_dimensions();
   int get_solved_dimensions();
 };

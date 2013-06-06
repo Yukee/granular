@@ -12,7 +12,7 @@ enum bound {lower, upper};
 class FD1Solver
 {
 public:
-    FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, Flux *bs, Vector<double> lowerLeftCorner);
+    FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, Vector<double> lowerLeftCorner);
 
     VectorField get_numerical_flux_gradient(VectorField un);
 
@@ -56,7 +56,6 @@ private:
     Vector<double> m_deltaX;
     Vector<double> m_xInterval;
     Equation *m_eq;
-    Flux *m_bs;
     Vector<double> m_lowerLeftCorner;
     Vector<int> m_nxSteps;
 

@@ -8,7 +8,7 @@
 #include "BurgersFlux1D.h"
 #include "NSFlux.h"
 #include "Equation.h"
-//#include "FD1Solver.h"
+#include "FD1Solver.h"
 //#include "timeSolver.h"
 //#include "EulerSolver.h"
 //#include "RK2Solver.h"
@@ -25,8 +25,8 @@ int main()
   ScalarField s(R);
   VectorField v(3,s);
   Flux *zero = new ZeroFlux(42,3);
-  for(int d=0;d<42;d++) cout << zero->evaluate(v)[0][d] << endl;
-  
+  for(int d=0;d<42;d++) cout << (zero->evaluate(v)[d] == zero->evaluate(v,d) ) << endl;
+
   // Navier-Stokes in a 3D space
   int d = 3;
   Vector<int> x(d,1);
@@ -34,7 +34,7 @@ int main()
   for(int i=0;i<d;i++) u[i](Vector<int> (d,0)) = 2;
   u[2](Vector<int> (d,0)) = 1;
   Flux *f = new NSFlux(d);
-  for(int i=0;i<d;i++) for(int j=0;j<d;j++) cout << f->evaluate(u)[i][j] << endl;
+  for(int i=0;i<d;i++) for(int j=0;j<d;j++) cout << ( f->evaluate(u)[i][j] == f->evaluate(u,i)[j] ) << endl;
   for(int dim=0;dim<d;dim++) 
     {
       cout << "Jacobian of the flux " << dim << ":" << endl;
@@ -45,7 +45,7 @@ int main()
   Equation NSEq(f);
   for(int dim=0;dim<d;dim++) 
     {
-      for(int i=0;i<d;i++) for(int j=0;j<d;j++) cout <<NSEq.get_diffusionFlux(u)[i][j]<< endl;
+      for(int i=0;i<d;i++) for(int j=0;j<d;j++) cout <<NSEq.get_diffusionFlux(u,i)[j]<< endl;
     }
 
   ScalarField a(Vector<int> (2,2));
@@ -93,6 +93,16 @@ int main()
   VectorField vect2;
   vect2 =  VectorField (m_m, ScalarField (Vector<int> (3,2)));
   cout << vect.size() << "\t" << vect[2].get_range() << endl;
+
+
+  cout << "****************** Solver test area *******************" << endl;
+  Vector<double> dx(2,0.1); Vector<double> xI(2,1); Vector<double> lfc(2,0);
+  Flux *bf = new Burgers1D();
+  Flux *nsf = new NSFlux(2);
+  Equation *eq = new Equation(nsf);
+  FD1Solver sol(dx, xI, eq, lfc);
+
+  cout << sol.get_position() << endl;
 
   return 0;
 }

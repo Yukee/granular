@@ -42,6 +42,7 @@ public:
     virtual double & operator()(const Vector<int> & component);
     double & operator[](const int &);
     ScalarField max_field(const ScalarField) const;
+    ScalarField module() const;
     double get_max() const;
     void write_in_file(std::ostream & output, const Vector<double> deltaX, const Vector<double> lowerLeftCorner);
     Vector<int> get_pos(int) const;//retrieves the Position of the ith element of m_data

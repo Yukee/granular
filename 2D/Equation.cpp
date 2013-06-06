@@ -13,9 +13,9 @@ Equation::~Equation()
   if(m_diff) delete m_diff;
 }
 
-TensorField Equation::get_convectionFlux(VectorField u)
+VectorField Equation::get_convectionFlux(VectorField u, int d)
 {
-  return m_conv->evaluate(u);
+  return m_conv->evaluate(u,d);
 }
 
 Vector<TensorField> Equation::get_convectionFluxJacobian(VectorField u)
@@ -24,9 +24,14 @@ Vector<TensorField> Equation::get_convectionFluxJacobian(VectorField u)
   return m_conv->evaluate_jacobian(u);
 }
 
-TensorField Equation::get_diffusionFlux(VectorField u)
+VectorField Equation::get_diffusionFlux(VectorField u,int d)
 {
-  return m_diff->evaluate(u);
+  return m_diff->evaluate(u,d);
+}
+
+ScalarField Equation::get_max_eigenvalue(VectorField u, int d)
+{
+  return m_conv->get_max_eigenvalue(u,d);
 }
 
 int Equation::get_space_dimensions()

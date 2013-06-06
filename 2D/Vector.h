@@ -37,7 +37,7 @@ public :
     bool is_eq = (v1.N == v2.N);
     if(is_eq)
       {
-	for(int i=0;i<v1.N;i++) is_eq *= (v1.m_data[i] == v2.m_data[i]);
+	for(unsigned int i=0;i<v1.N;i++) is_eq *= (v1.m_data[i] == v2.m_data[i]);
       }
     return is_eq;
   }

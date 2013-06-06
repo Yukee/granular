@@ -5,8 +5,8 @@
 
 using namespace std;
 
-FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, Flux *bs, Vector<double> lowerLeftCorner) :
-   m_deltaX(deltaX), m_xInterval(xInterval), m_eq(eq), m_bs(bs), m_lowerLeftCorner(lowerLeftCorner)
+FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, Vector<double> lowerLeftCorner) :
+   m_deltaX(deltaX), m_xInterval(xInterval), m_eq(eq), m_lowerLeftCorner(lowerLeftCorner)
 {
   // Gets the dimensions of the problem
   m_m = m_eq->get_solved_dimensions();
@@ -54,7 +54,6 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
 FD1Solver::~FD1Solver()
 {
     if(m_eq) delete m_eq;
-    if(m_bs) delete m_bs;
 }
 
 double FD1Solver::check_CFL(double deltaT)
@@ -164,12 +163,12 @@ void FD1Solver::compute_numerical_convection_flux()
 
   for(int d=0;d<m_n;d++)
     {
-      upperFlux = m_eq->get_convectionFlux(upper_right_intermediate_un_values[d])[d];
-      lowerFlux = m_eq->get_convectionFlux(lower_right_intermediate_un_values[d])[d];
+      upperFlux = m_eq->get_convectionFlux(upper_right_intermediate_un_values[d], d);
+      lowerFlux = m_eq->get_convectionFlux(lower_right_intermediate_un_values[d], d);
       right_convection_flux[d] = (0.5*unity)*(upperFlux + lowerFlux) + (-0.5*unity)*right_localSpeed[d]*(upper_right_intermediate_un_values[d]  - lower_right_intermediate_un_values[d]);
 
-      upperFlux = m_eq->get_convectionFlux(upper_left_intermediate_un_values[d])[d];
-      lowerFlux = m_eq->get_convectionFlux(lower_left_intermediate_un_values[d])[d];
+      upperFlux = m_eq->get_convectionFlux(upper_left_intermediate_un_values[d], d);
+      lowerFlux = m_eq->get_convectionFlux(lower_left_intermediate_un_values[d], d);
       left_convection_flux[d] = (0.5*unity)*(upperFlux + lowerFlux) + (-0.5*unity)*left_localSpeed[d]*(upper_left_intermediate_un_values[d] - lower_left_intermediate_un_values[d]);
     }
    
@@ -180,8 +179,8 @@ void FD1Solver::compute_numerical_diffusion_flux()
   //no particular bc on the flux?
   for(int d=0;d<m_n;d++)
     {
-      right_diffusion_flux[d] = m_eq->get_convectionFlux(upper_right_intermediate_un_values[d])[d];
-      left_diffusion_flux[d] = m_eq->get_convectionFlux(upper_left_intermediate_un_values[d])[d];
+      right_diffusion_flux[d] = m_eq->get_convectionFlux(upper_right_intermediate_un_values[d], d);
+      left_diffusion_flux[d] = m_eq->get_convectionFlux(upper_left_intermediate_un_values[d], d);
     }
    
 }

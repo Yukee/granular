@@ -44,6 +44,8 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
   right_diffusion_flux = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
   left_diffusion_flux = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
 
+  un_derivatives = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
+
   right_localSpeed = VectorField (m_n, PeriodicField (m_nxSteps ) );
   left_localSpeed = VectorField (m_n, PeriodicField (m_nxSteps ) );
 
@@ -188,12 +190,13 @@ void FD1Solver::compute_numerical_diffusion_flux()
 //the flux gradient may be infinite, if you take a too large time step.
 VectorField FD1Solver::get_numerical_flux_gradient(VectorField un)
 {
+  m_un = un;
+
   compute_un_derivatives();
   compute_intermediate_un_values();
   compute_localSpeed();
   compute_numerical_convection_flux();
   compute_numerical_diffusion_flux();
-
   VectorField flux_gradient(m_m, PeriodicField (m_nxSteps));
   for(int i=0;i<m_m;i++) for(int it=0;it<flux_gradient[i].get_size();++it) flux_gradient[i][it] = 0;
 

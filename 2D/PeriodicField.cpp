@@ -31,28 +31,10 @@ double & PeriodicField::operator()(const Vector<int> & component)
 
 /**********************************************/
 
-PeriodicField::PeriodicField()
-{
-  m_r = Vector<int>(2,1);
-  m_r_len = m_r.size();
-  m_data_len = 1;
-  m_data = new double[m_data_len];
-  m_data[0] = 0;
-}
-
-PeriodicField::PeriodicField(const PeriodicField & u)
-{
-  m_r = u.m_r;
-  m_r_len = u.m_r_len;
-  m_data_len = u.m_data_len;
-    m_data = new double[m_data_len];
-    for(unsigned int i=0;i<m_data_len;i++) m_data[i] = u.m_data[i];
-}
-
 PeriodicField::~PeriodicField()
 {
-    if(m_data) delete[] m_data;
-    m_data = 0;
+  if(m_data) delete[] m_data;
+  m_data = NULL;
 }
 
 PeriodicField & PeriodicField::operator=(const PeriodicField & u)

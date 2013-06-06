@@ -32,8 +32,8 @@ void EulerSolver::get_solution(string name)
     {
       df = m_spatialSolver->get_numerical_flux_gradient(m_un);
 
-      testDeltaT = m_spatialSolver->check_CFL(newDeltaT);
-      if(testDeltaT!=newDeltaT) newDeltaT = testDeltaT;
+      //testDeltaT = m_spatialSolver->check_CFL(newDeltaT);
+      //if(testDeltaT!=newDeltaT) newDeltaT = testDeltaT;
 
       un1 = m_un  - (newDeltaT*unity)*df;
 

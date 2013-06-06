@@ -32,7 +32,7 @@ ScalarField::ScalarField(Vector<int> range)
 ScalarField::~ScalarField()
 {
     if(m_data) delete[] m_data;
-    m_data = 0;
+    m_data = NULL;
 }
 
 ScalarField & ScalarField::operator=(const ScalarField & u)

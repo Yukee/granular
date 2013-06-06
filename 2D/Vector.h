@@ -136,7 +136,7 @@ Vector<T>::Vector(const Vector<T> & v)
 template <class T>
 Vector<T>::~Vector()
 {
-  if(m_data) delete[] m_data;
+  delete[] m_data;
   m_data = 0;
 }
 

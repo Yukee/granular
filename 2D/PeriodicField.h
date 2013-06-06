@@ -12,9 +12,9 @@ class PeriodicField : public ScalarField
 
   /**************************************/
 
-  PeriodicField(); // by default is constructed a scalard field on a 2D space, equal to 0 at the origin and not defined elsewhere.
-    PeriodicField(const PeriodicField &); // overloading the copy constructor because the default one let both m_data pointers point the same memory
-    ~PeriodicField();
+ PeriodicField() : ScalarField() {} // by default is constructed a scalard field on a 2D space, equal to 0 at the origin and not defined elsewhere.
+ PeriodicField(const PeriodicField & u) : ScalarField(u) {} // overloading the copy constructor because the default one let both m_data pointers point the same memory
+    virtual ~PeriodicField();
     
     void resize_field(Vector<int> range);
     inline unsigned int get_space_dimension() const

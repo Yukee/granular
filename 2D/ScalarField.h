@@ -14,7 +14,7 @@ public:
   ScalarField(); // by default is constructed a scalard field on a 2D space, equal to 0 at the origin and not defined elsewhere.
     ScalarField(const ScalarField &); // overloading the copy constructor because the default one let both m_data pointers point the same memory
     ScalarField(Vector<int> range); // creates a scalar field on a range.size()D space, defined on a rectangle of lengths range[i]. Note that the data is NOT initialized.
-    ~ScalarField();
+    virtual ~ScalarField();
     
     void resize_field(Vector<int> range);
     inline unsigned int get_space_dimension() const

@@ -35,6 +35,24 @@ public:
         return m_lowerLeftCorner;
     }
 
+    inline VectorField get_flux(VectorField u0, int d)
+    {
+      get_numerical_flux_gradient(u0);
+      return m_eq->get_convectionFlux(m_un, d);
+    }
+
+    inline VectorField get_intermediate_values(VectorField u0, int d)
+    {
+      get_numerical_flux_gradient(u0);
+      return lower_left_intermediate_un_values[d];
+    }
+
+    inline VectorField get_derivatives(VectorField u0, int d)
+    {
+      get_numerical_flux_gradient(u0);
+      return un_derivatives[0];
+    }
+
     inline Vector<TensorField> get_flux_jacobian(VectorField u0)
     {
         get_numerical_flux_gradient(u0);
@@ -57,7 +75,7 @@ public:
       return m_b;
     }
 
-private:
+    //private:
     int m_m; //number of solved dimensions
     int m_n; //number of space dimensions
 
@@ -93,7 +111,7 @@ private:
     void compute_numerical_convection_flux();
     void compute_numerical_diffusion_flux();
     double minmod(double a, double b);
-    double three_pts_derivative(Vector<int> j, int d, int i); //du/dx at point j in the x or y direction
+    double three_pts_derivative(int it, int d, int i); //du/dx at point get_pos(it) in the x or y direction
 
     // caca
     PeriodicField unity;

@@ -93,11 +93,12 @@ double FD1Solver::minmod(double a, double b)
   return minmod;
 }
 
-double FD1Solver::three_pts_derivative(Vector<int> j, int dir, int i)
+double FD1Solver::three_pts_derivative(int it, int dir, int i)
 {
+  Vector<int> j = m_un[i].get_pos(it);
   double deriv;
 
-  deriv = minmod( (m_un[i](j) - m_un[i](j - m_b[dir]))/m_deltaX[dir], (m_un[i](j + m_b[dir]) - m_un[i](j))/m_deltaX[dir] );
+  deriv = minmod( (m_un[i][it] - m_un[i](j - m_b[dir]))/m_deltaX[dir], (m_un[i](j + m_b[dir]) - m_un[i][it])/m_deltaX[dir] );
   return deriv;
 }// returns the derivative in direction dir for field m_un[i]
 
@@ -109,7 +110,7 @@ void FD1Solver::compute_un_derivatives()
 	{
 	  for(int it=0;it<un_derivatives[d][i].get_size();++it)
 	    {
-	      un_derivatives[d][i][it] = three_pts_derivative(un_derivatives[d][i].get_pos(it),d,i);
+	      un_derivatives[d][i][it] = three_pts_derivative(it,d,i);
 	    }
 	}
     }
@@ -183,8 +184,8 @@ void FD1Solver::compute_numerical_diffusion_flux()
   //no particular bc on the flux?
   for(int d=0;d<m_n;d++)
     {
-      right_diffusion_flux[d] = m_eq->get_convectionFlux(upper_right_intermediate_un_values[d], d);
-      left_diffusion_flux[d] = m_eq->get_convectionFlux(upper_left_intermediate_un_values[d], d);
+      right_diffusion_flux[d] = m_eq->get_diffusionFlux(upper_right_intermediate_un_values[d], d);
+      left_diffusion_flux[d] = m_eq->get_diffusionFlux(upper_left_intermediate_un_values[d], d);
     }
    
 }
@@ -205,7 +206,7 @@ VectorField FD1Solver::get_numerical_flux_gradient(VectorField un)
   for(int d=0;d<m_n;d++)
     {
       flux_gradient = flux_gradient 
-	+ ((1./m_deltaX[d])*unity)*( right_convection_flux[d] - left_convection_flux[d] 
+	+ ((1./m_deltaX[d])*unity)*( right_convection_flux[d] - left_convection_flux[d]
 				     - right_diffusion_flux[d] + left_diffusion_flux[d] );
     }
 

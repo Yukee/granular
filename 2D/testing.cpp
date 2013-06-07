@@ -74,9 +74,9 @@ int main()
 
 
   cout << "****************** Solver test area *******************" << endl;
-  int dim = 1;
-  Vector<double> dx(dim,0.1); Vector<double> xI(dim,2*M_PI); Vector<double> lfc(dim,0);
-  Flux *bf = new Burgers1D();//new NSFlux(dim);
+  int dim = 2;
+  Vector<double> dx(dim,0.1); Vector<double> xI(dim,4*M_PI); Vector<double> lfc(dim,0);
+  Flux *bf = new NSFlux(dim);
   Equation *eq = new Equation(bf);
   FD1Solver sol(dx, xI, eq, lfc);
 
@@ -85,10 +85,10 @@ int main()
   VectorField pos = sol.get_position();
   VectorField u0 (dim, PeriodicField (xr) );
   for(int d=0;d<dim;d++) for(int it=0;it<u0[d].get_size();++it)
-  			   u0[d][it] = 0.5 + cos(pos[d][it]);
+  			   u0[d][it] = 0.5 + cos(pos[0][it])*cos(pos[1][it]);
    EulerSolver tse(dt, T, &sol, u0);
 
-   tse.get_solution("caca");
+   tse.get_solution("2DNS");
 
   return 0;
 }

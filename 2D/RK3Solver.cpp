@@ -41,7 +41,7 @@ void RK3Solver::get_solution(string name)
         df = m_spatialSolver->get_numerical_flux_gradient(u);
         u = (1/3.)*m_un + (2/3.)*(u + (-1)*newDeltaT*df);
 
-        if( (int)(10*currenttime) == writingCounter )
+        if( (int)(currenttime/10) == writingCounter )
         {
             cout << "writing file number " << writingCounter << endl;
             //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; only in C++ 11

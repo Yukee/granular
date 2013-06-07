@@ -142,15 +142,15 @@ int main()
 
     Vector<double> deltaX(2);
     double deltaT = 0.01;
-    double tInterval = 10;
+    double tInterval = 50;
     Vector<double> xInterval(2);
     Vector<double> lowerLeftCorner(2);
 
-    deltaX[0] = 0.05;
-    deltaX[1] = 0.01;
+    deltaX[0] = 0.1;
+    deltaX[1] = 0.02;
     xInterval[0] = 6;// -3<x<0
     xInterval[1] = H;// 0<z<1
-    lowerLeftCorner[0] = -xInterval[0]; lowerLeftCorner[1] = 0;
+    lowerLeftCorner[0] = -xInterval[0]; lowerLeftCorner[1] = deltaX[1];
     Vector<int> nxSteps(2);
     nxSteps[0] = xInterval[0]/deltaX[0];
     nxSteps[1] = xInterval[1]/deltaX[1];
@@ -186,7 +186,7 @@ int main()
     flow2Dsolver->set_uSouth(uSouth);
 
     timeSolver *flow2DRK3 = new RK3Solver(deltaT, tInterval, flow2Dsolver, psi0);
-    flow2DRK3->get_solution("concentration_with_source");
+    flow2DRK3->get_solution("concentration_without_source_steady");
 
     /************************Burgers 2D***************************************************/
    // Equation *burgersEq = new SingleEquation(&f, &df);

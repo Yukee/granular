@@ -317,7 +317,7 @@ ScalarField FD1Solver::get_numerical_flux_gradient(ScalarField un)
     {
       flux_gradient = flux_gradient + (1./m_deltaX[dir])*( right_convection_flux[dir] - left_convection_flux[dir] );
     }
-    flux_gradient = flux_gradient - m_eq->get_sourceTerm(m_un);
+    //flux_gradient = flux_gradient - m_eq->get_sourceTerm(m_un);
     return flux_gradient;
 }
 

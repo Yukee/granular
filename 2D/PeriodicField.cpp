@@ -4,6 +4,8 @@
 #include <math.h>
 using namespace std;
 
+#define DEBUG
+
 int PeriodicField::modulo (int m, int n)
 { 
   int mod = m % n;

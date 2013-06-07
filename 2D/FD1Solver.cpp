@@ -50,7 +50,8 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
   left_localSpeed = VectorField (m_n, PeriodicField (m_nxSteps ) );
 
   // caca
-  unity = 1 + 0*unity;
+  unity.resize_field (m_nxSteps);
+  unity =  1 + 0*unity;
 }
 
 FD1Solver::~FD1Solver()

@@ -142,7 +142,7 @@ int main()
 
     Vector<double> deltaX(2);
     double deltaT = 0.01;
-    double tInterval = 50;
+    double tInterval = 200;
     Vector<double> xInterval(2);
     Vector<double> lowerLeftCorner(2);
 

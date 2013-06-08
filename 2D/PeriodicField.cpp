@@ -31,13 +31,13 @@ double & PeriodicField::operator()(const Vector<int> & component)
     return m_data[element];
 }
 
-/**********************************************/
-
 PeriodicField::~PeriodicField()
 {
   if(m_data) delete[] m_data;
   m_data = NULL;
 }
+
+/**********************************************/
 
 PeriodicField & PeriodicField::operator=(const PeriodicField & u)
 {
@@ -243,5 +243,16 @@ void PeriodicField::write_in_file(ostream & output, const Vector<double> deltaX,
         for(unsigned int j=0;j<m_r_len;j++) output << pTemp[j]*deltaX[j]+lowerLeftCorner[j] << "\t";
         output << m_data[i] << endl;
     }
+}
+
+void PeriodicField::write_in_file_matrixform(ostream & output)
+{
+if(m_r_len != 2) throw invalid_argument("In ScalarField::write_in_file_matrixform: the dimension of the field must be 2");
+
+for(unsigned int it=0;it<m_data_len;++it)
+{
+output << m_data[it] << "\t";
+if( (it + 1) % m_r[0] == 0 ) output << endl;
+}
 }
 

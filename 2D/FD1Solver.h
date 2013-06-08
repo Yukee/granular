@@ -30,6 +30,25 @@ public:
         return m_deltaX;
     }
 
+inline int get_space_dimensions()
+{
+	return m_n;
+}
+
+inline int get_solved_dimensions()
+{	
+	return m_m;
+}
+
+// returns a 2 vector: first component; left bound, second component: right bound.
+inline Vector< Vector<double> > get_domain_bounds()
+{
+	Vector< Vector<double> > dom ( 2, Vector<double> (m_n) );
+	dom[0] = m_lowerLeftCorner;
+	dom[1] = dom[0] + m_xInterval;
+	return dom;
+}
+
     inline Vector<double> get_lowerLeftCorner()
     {
         return m_lowerLeftCorner;
@@ -75,7 +94,7 @@ public:
       return m_b;
     }
 
-    //private:
+ private:
     int m_m; //number of solved dimensions
     int m_n; //number of space dimensions
 

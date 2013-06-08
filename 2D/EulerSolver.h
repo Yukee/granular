@@ -8,7 +8,7 @@ class EulerSolver : public timeSolver
     public:
         EulerSolver(double deltaT, double T, FD1Solver *spatialSolver, VectorField initial_conditions);
 
-        void get_solution(std::string name);
+        virtual void get_solution(std::string name, double dt);
 };
 
 #endif // EULERSOLVER_H

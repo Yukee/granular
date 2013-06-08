@@ -11,8 +11,10 @@ EulerSolver::EulerSolver(double deltaT, double T, FD1Solver *spatialSolver, Vect
   m_ntSteps = m_T/m_deltaT;
 }
 
-void EulerSolver::get_solution(string name)
+void EulerSolver::get_solution(string name, double dt)
 {
+	timeSolver::get_solution(name, dt);
+
   Vector<double> deltaX = m_spatialSolver->get_deltaX();
   Vector<double> lowerLeftCorner = m_spatialSolver->get_lowerLeftCorner();
   fstream data;
@@ -37,13 +39,14 @@ void EulerSolver::get_solution(string name)
 
       un1 = m_un  - (newDeltaT*unity)*df;
 
-      if( (int)(1*currenttime) == writingCounter )
+      if( (int)(dt*currenttime) == writingCounter )
         {
 	  cout << "writing file number " << writingCounter << endl;
 	  //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; Only in C++ 11
 	  path =  "Results/" + name + "_" + boost::lexical_cast<string>(writingCounter) + ".tsv";
 	  data.open(path.c_str(), ios::out);
-	  un1[0].write_in_file(data, deltaX, lowerLeftCorner);
+	  //un1[0].write_in_file(data, deltaX, lowerLeftCorner);
+	  un1[0].write_in_file_matrixform(data);
 	  data.close();
 	  writingCounter++;
         }

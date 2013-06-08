@@ -75,7 +75,7 @@ int main()
 
   cout << "****************** Solver test area *******************" << endl;
   int dim = 2;
-  Vector<double> dx(dim,0.1); Vector<double> xI(dim,4*M_PI); Vector<double> lfc(dim,0);
+  Vector<double> dx(dim,0.1); Vector<double> xI(dim,2*M_PI); Vector<double> lfc(dim,0);
   Flux *bf = new NSFlux(dim);
   Equation *eq = new Equation(bf);
   FD1Solver sol(dx, xI, eq, lfc);
@@ -88,7 +88,7 @@ int main()
   			   u0[d][it] = 0.5 + cos(pos[0][it])*cos(pos[1][it]);
    EulerSolver tse(dt, T, &sol, u0);
 
-   tse.get_solution("2DNS");
+   tse.get_solution("2DNSContour",1.0);
 
   return 0;
 }

@@ -10,12 +10,12 @@ class PeriodicField : public ScalarField
   virtual double & operator()(const Vector<int> &);
  PeriodicField(Vector<int> range) : ScalarField(range) {}
 
-  /**************************************/
-
  PeriodicField() : ScalarField() {} // by default is constructed a scalard field on a 2D space, equal to 0 at the origin and not defined elsewhere.
  PeriodicField(const PeriodicField & u) : ScalarField(u) {} // overloading the copy constructor because the default one let both m_data pointers point the same memory
     virtual ~PeriodicField();
     
+  /**************************************/
+
     void resize_field(Vector<int> range);
     inline unsigned int get_space_dimension() const
     {
@@ -44,6 +44,7 @@ class PeriodicField : public ScalarField
     PeriodicField module() const;
     double get_max() const;
     void write_in_file(std::ostream & output, const Vector<double> deltaX, const Vector<double> lowerLeftCorner);
+    void write_in_file_matrixform(std::ostream & output);
     Vector<int> get_pos(int) const;//retrieves the Position of the ith element of m_data
 
  private:

@@ -2,7 +2,9 @@
 #define FLUX_H
 
 #include "Vector.h"
+#include "ScalarField.h"
 #include "PeriodicField.h"
+#include "NullField.h"
 
 typedef Vector<PeriodicField> VectorField;
 typedef Vector<VectorField> TensorField;

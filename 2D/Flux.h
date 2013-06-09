@@ -6,7 +6,8 @@
 #include "PeriodicField.h"
 #include "NullField.h"
 
-typedef Vector<PeriodicField> VectorField;
+typedef NullField SField;
+typedef Vector<SField> VectorField;
 typedef Vector<VectorField> TensorField;
 
 class Flux
@@ -43,7 +44,7 @@ class Flux
   virtual Vector<TensorField> evaluate_jacobian(VectorField)=0;
 
   // returns the maximal eigenvalue (in module) of the restriction to 1 space dimension of the jacobian
-  virtual PeriodicField get_max_eigenvalue(VectorField, int)=0;
+  virtual SField get_max_eigenvalue(VectorField, int)=0;
 
   int get_space_dimensions();
   int get_solved_dimensions();

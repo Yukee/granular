@@ -13,9 +13,10 @@
 #include "EulerSolver.h"
 //#include "RK2Solver.h"
 //#include "RK3Solver.h"
-#include "PeriodicField.h"
+#include "ScalarField.h"
 #include "PeriodicField.h"
 #include "NullField.h"
+#include "PrescribedField.h"
 
 using namespace std;
 int main()
@@ -29,7 +30,7 @@ int main()
   double dt = 0.01; double T = 10;
   Vector<int> xr (dim); for(int d=0;d<dim;d++) xr[d] = xI[d]/dx[d];
   VectorField pos = sol.get_position();
-  VectorField u0 (dim, PeriodicField (xr) );
+  VectorField u0 (dim, SField (xr) );
   for(int d=0;d<dim;d++) for(int it=0;it<u0[d].get_size();++it)
   			   u0[d][it] = 0.5 + cos(pos[0][it]);
    EulerSolver tse(dt, T, &sol, u0);

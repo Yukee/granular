@@ -3,11 +3,9 @@
 
 #include "Vector.h"
 #include "PeriodicField.h"
+#include "NullField.h"
 #include "Flux.h"
 #include "ZeroFlux.h"
-
-typedef Vector<PeriodicField> VectorField;
-typedef Vector<VectorField> TensorField;
 
 class Equation
 {
@@ -40,7 +38,7 @@ public:
   VectorField get_convectionFlux(VectorField,int);
   Vector<TensorField> get_convectionFluxJacobian(VectorField);
   VectorField get_diffusionFlux(VectorField,int);
-  PeriodicField get_max_eigenvalue(VectorField,int);
+  SField get_max_eigenvalue(VectorField,int);
   int get_space_dimensions();
   int get_solved_dimensions();
 };

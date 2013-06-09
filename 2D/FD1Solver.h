@@ -5,6 +5,7 @@
 #include "Vector.h"
 #include "ScalarField.h"
 #include "PeriodicField.h"
+#include "NullField.h"
 
 enum grid_position {lft, rght};
 enum bound {lower, upper};
@@ -84,7 +85,7 @@ inline Vector< Vector<double> > get_domain_bounds()
         return m_un;
     }
 
-    inline PeriodicField get_unity()
+    inline SField get_unity()
     {
       return unity;
     }
@@ -133,7 +134,7 @@ inline Vector< Vector<double> > get_domain_bounds()
     double three_pts_derivative(int it, int d, int i); //du/dx at point get_pos(it) in the x or y direction
 
     // caca
-    PeriodicField unity;
+    SField unity;
 };
 
 

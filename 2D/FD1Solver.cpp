@@ -34,20 +34,20 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
     }
 
   // Sets the ranges of the various computation used fields
-  upper_right_intermediate_un_values = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps ) ) );
-  lower_right_intermediate_un_values = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps ) ) );
-  upper_left_intermediate_un_values = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps ) ) );
-  lower_left_intermediate_un_values = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps ) ) );
+  upper_right_intermediate_un_values = TensorField (m_n, VectorField (m_m, SField (m_nxSteps ) ) );
+  lower_right_intermediate_un_values = TensorField (m_n, VectorField (m_m, SField (m_nxSteps ) ) );
+  upper_left_intermediate_un_values = TensorField (m_n, VectorField (m_m, SField (m_nxSteps ) ) );
+  lower_left_intermediate_un_values = TensorField (m_n, VectorField (m_m, SField (m_nxSteps ) ) );
 
-  right_convection_flux = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
-  left_convection_flux = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
-  right_diffusion_flux = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
-  left_diffusion_flux = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
+  right_convection_flux = TensorField (m_n, VectorField (m_m, SField (m_nxSteps) ) );
+  left_convection_flux = TensorField (m_n, VectorField (m_m, SField (m_nxSteps) ) );
+  right_diffusion_flux = TensorField (m_n, VectorField (m_m, SField (m_nxSteps) ) );
+  left_diffusion_flux = TensorField (m_n, VectorField (m_m, SField (m_nxSteps) ) );
 
-  un_derivatives = TensorField (m_n, VectorField (m_m, PeriodicField (m_nxSteps) ) );
+  un_derivatives = TensorField (m_n, VectorField (m_m, SField (m_nxSteps) ) );
 
-  right_localSpeed = VectorField (m_n, PeriodicField (m_nxSteps ) );
-  left_localSpeed = VectorField (m_n, PeriodicField (m_nxSteps ) );
+  right_localSpeed = VectorField (m_n, SField (m_nxSteps ) );
+  left_localSpeed = VectorField (m_n, SField (m_nxSteps ) );
 
   // caca
   unity.resize_field (m_nxSteps);
@@ -63,7 +63,7 @@ FD1Solver::~FD1Solver()
 double FD1Solver::check_CFL(double deltaT)
 {
     double newDeltaT = deltaT;
-    Vector<PeriodicField> waveSpeed(m_n);
+    Vector<SField> waveSpeed(m_n);
     Vector<double> maxFrequency(m_n);
     double overallMaxFreq=0;
 
@@ -145,8 +145,8 @@ void FD1Solver::compute_intermediate_un_values()
 
 void FD1Solver::compute_localSpeed()
 {
-  PeriodicField lowerSpeed;
-  PeriodicField upperSpeed;
+  SField lowerSpeed;
+  SField upperSpeed;
 
   for(int dir=0;dir<m_n;dir++)
     {
@@ -200,7 +200,7 @@ VectorField FD1Solver::get_numerical_flux_gradient(VectorField un)
   compute_localSpeed();
   compute_numerical_convection_flux();
   compute_numerical_diffusion_flux();
-  VectorField flux_gradient(m_m, PeriodicField (m_nxSteps));
+  VectorField flux_gradient(m_m, SField (m_nxSteps));
   for(int i=0;i<m_m;i++) for(int it=0;it<flux_gradient[i].get_size();++it) flux_gradient[i][it] = 0;
 
   for(int d=0;d<m_n;d++)

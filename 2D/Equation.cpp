@@ -29,7 +29,7 @@ VectorField Equation::get_diffusionFlux(VectorField u,int d)
   return m_diff->evaluate(u,d);
 }
 
-PeriodicField Equation::get_max_eigenvalue(VectorField u, int d)
+SField Equation::get_max_eigenvalue(VectorField u, int d)
 {
   return m_conv->get_max_eigenvalue(u,d);
 }

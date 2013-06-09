@@ -7,6 +7,7 @@
 #include "FD1Solver.h"
 #include "ScalarField.h"
 #include "PeriodicField.h"
+#include "NullField.h"
 
 class timeSolver
 {

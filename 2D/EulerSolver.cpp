@@ -28,7 +28,7 @@ void EulerSolver::get_solution(string name, double dt)
   VectorField un1 = m_un;
   VectorField df;
 
-  PeriodicField unity = m_spatialSolver->get_unity();
+  SField unity = m_spatialSolver->get_unity();
 
   for(currenttime=0;currenttime<=m_T;currenttime += newDeltaT)
     {

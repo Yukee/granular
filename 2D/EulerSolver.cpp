@@ -39,14 +39,14 @@ void EulerSolver::get_solution(string name, double dt)
 
       un1 = m_un  - (newDeltaT*unity)*df;
 
-      if( (int)(dt*currenttime) == writingCounter )
+      if( (int)(currenttime/dt) == writingCounter )
         {
 	  cout << "writing file number " << writingCounter << endl;
 	  //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; Only in C++ 11
 	  path =  "Results/" + name + "_" + boost::lexical_cast<string>(writingCounter) + ".tsv";
 	  data.open(path.c_str(), ios::out);
-	  //un1[0].write_in_file(data, deltaX, lowerLeftCorner);
-	  un1[0].write_in_file_matrixform(data);
+	  un1[0].write_in_file(data, deltaX, lowerLeftCorner);
+	  //un1[0].write_in_file_matrixform(data);
 	  data.close();
 	  writingCounter++;
         }

@@ -35,7 +35,8 @@ int main()
   			   u0[d][it] = 0.5 + cos(pos[0][it]);
    EulerSolver tse(dt, T, &sol, u0);
 
-   tse.get_solution("burgers",0.01);
-
+   //tse.get_solution("burgers",0.01);
+	PrescribedField pf(Vector<int> (2,2));
+	cout << pf(Vector<int> (2,2));
   return 0;
 }

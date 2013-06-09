@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <ostream>
 
+#include <iostream>
+
 template <class T=int>
 class Vector
 {
@@ -97,6 +99,9 @@ inline friend std::ostream & operator<<(std::ostream & stream, const Vector<T> &
   Vector< Vector<T> > get_base_vectors(const T additiveIdentity, const T multiplicativeIdentity);
 
   void resize(const unsigned int n);
+  
+  // drops component j of the Vector, thus returning a Vector of dim N-1
+  Vector<T> drop(const int & j);
 
 private :
   T *m_data;
@@ -173,6 +178,24 @@ void Vector<T>::resize(const unsigned int n)
         m_data = 0;
         m_data = new T[N];
     }
+}
+
+template <class T>
+Vector<T> Vector<T>::drop(const int & j)
+{
+	if(j >= (int)N || j < 0) throw std::invalid_argument("In Vector::drop()");
+	
+	Vector<T> dropped (N-1);
+	
+	int it=0;
+	for(unsigned int i=0;i<dropped.N;i++)
+	{
+		dropped.m_data[i] = m_data[it];
+		it++;
+		if((int)it == j) it++;
+	}
+	
+	return dropped;
 }
 
 #endif

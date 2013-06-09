@@ -5,8 +5,9 @@
 #include "ScalarField.h"
 #include "PeriodicField.h"
 #include "NullField.h"
+#include "PrescribedField.h"
 
-typedef NullField SField;
+typedef PrescribedField SField;
 typedef Vector<SField> VectorField;
 typedef Vector<VectorField> TensorField;
 

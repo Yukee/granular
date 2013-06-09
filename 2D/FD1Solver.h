@@ -30,6 +30,11 @@ public:
     {
         return m_deltaX;
     }
+    
+    inline Vector<int> get_nxSteps()
+    {
+		return m_nxSteps;
+	}
 
 inline int get_space_dimensions()
 {

@@ -8,29 +8,35 @@ class PrescribedField : public ScalarField
  public:
   virtual double & operator()(Vector<int> );
 
- PrescribedField() {
+  PrescribedField() {
 	 PrescribedField(Vector<int> (2,1));}
 	 
  PrescribedField(Vector<int> range): ScalarField(range) {
 	 m_bounds.resize(2*m_r_len);
-	 Vector<int> range_surf = m_r;
-	 Vector< Vector<int> > b = range_surf.get_base_vectors(1,0); for(unsigned int i=0;i<m_r_len;i++) range_surf = range_surf + b[i];
 	 
 	 for(unsigned int d=0;d<m_r_len;d++)
 	 {
-		 m_bounds[2*d].resize_field(range_surf.drop(d));
-		 m_bounds[2*d+1].resize_field(range_surf.drop(d));
+		 m_bounds[2*d].resize_field(m_r.drop(d));
+		 m_bounds[2*d+1].resize_field(m_r.drop(d));
 	 }
  }
 	 
  PrescribedField(const PrescribedField & u): ScalarField(u) {
 	 m_bounds = u.m_bounds;}
+
+ inline Vector<ScalarField> get_bounds()
+ {
+   return m_bounds;
+ }
 	 
  virtual ~PrescribedField();
  
  // sets surface orthogonal to the d axis of the cube (i is the direction, positive if i=1, negative if i=-1)
  void set_bound(const int d, const int i, const ScalarField & u); 
     
+    PrescribedField & operator=(const PrescribedField &);
+    PrescribedField & operator=(const double &);
+
   /**************************************/
 
     void resize_field(Vector<int> range);
@@ -46,7 +52,6 @@ class PrescribedField : public ScalarField
     {
         return m_data_len;
     }
-    PrescribedField & operator=(const PrescribedField &);
     bool operator==(const PrescribedField &);
     friend std::ostream & operator<<(std::ostream &, const PrescribedField &);
     friend PrescribedField operator+(const double &, const PrescribedField &);

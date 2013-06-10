@@ -97,7 +97,7 @@ double FD1Solver::three_pts_derivative(int it, int dir, int i)
 {
   Vector<int> j = m_un[i].get_pos(it);
   double deriv;
-
+  
   deriv = minmod( (m_un[i][it] - m_un[i](j - m_b[dir]))/m_deltaX[dir], (m_un[i](j + m_b[dir]) - m_un[i][it])/m_deltaX[dir] );
   return deriv;
 }// returns the derivative in direction dir for field m_un[i]
@@ -191,15 +191,20 @@ void FD1Solver::compute_numerical_diffusion_flux()
 }
 
 //the flux gradient may be infinite, if you take a too large time step.
-VectorField FD1Solver::get_numerical_flux_gradient(VectorField un)
+VectorField FD1Solver::get_numerical_flux_gradient(const VectorField & un)
 {
   m_un = un;
 
   compute_un_derivatives();
+
   compute_intermediate_un_values();
+
   compute_localSpeed();
+
   compute_numerical_convection_flux();
+
   compute_numerical_diffusion_flux();
+
   VectorField flux_gradient(m_m, SField (m_nxSteps));
   for(int i=0;i<m_m;i++) for(int it=0;it<flux_gradient[i].get_size();++it) flux_gradient[i][it] = 0;
 

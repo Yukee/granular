@@ -11,8 +11,8 @@ class Vector
 {
 public :
   Vector();
-  Vector(const unsigned int);
-  Vector(const unsigned int, const T);
+  Vector(const unsigned int &);
+  Vector(const unsigned int &, const T &);
   Vector(const Vector &);
     ~Vector();
   inline Vector<T> & operator+=(const Vector<T> & right)
@@ -116,14 +116,14 @@ Vector<T>::Vector()
 }
 
 template <class T>
-Vector<T>::Vector(const unsigned int n)
+Vector<T>::Vector(const unsigned int & n)
 {
   N = n;
   m_data = new T[N];
 }
 
 template <class T>
-Vector<T>::Vector(const unsigned int n, const T value)
+Vector<T>::Vector(const unsigned int & n, const T & value)
 {
   N = n;
   m_data = new T[N];
@@ -142,7 +142,7 @@ template <class T>
 Vector<T>::~Vector()
 {
   delete[] m_data;
-  m_data = 0;
+  m_data = NULL;
 }
 
 template <class T>
@@ -183,19 +183,19 @@ void Vector<T>::resize(const unsigned int n)
 template <class T>
 Vector<T> Vector<T>::drop(const int & j)
 {
-	if(j >= (int)N || j < 0) throw std::invalid_argument("In Vector::drop()");
+  if(j >= (int)N || j < 0) throw std::invalid_argument("In Vector::drop()");
 	
-	Vector<T> dropped (N-1);
+  Vector<T> dropped (N-1);
 	
-	int it=0;
-	for(unsigned int i=0;i<dropped.N;i++)
-	{
-		dropped.m_data[i] = m_data[it];
-		it++;
-		if((int)it == j) it++;
-	}
+  int it=0;
+  for(unsigned int i=0;i<dropped.N;i++)
+    {
+      if((int)it == j) it++;
+      dropped.m_data[i] = m_data[it];
+      it++;
+    }
 	
-	return dropped;
+  return dropped;
 }
 
 #endif

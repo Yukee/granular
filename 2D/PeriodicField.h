@@ -10,7 +10,7 @@ class PeriodicField : public ScalarField
   virtual double & operator()(const Vector<int> &);
  PeriodicField(Vector<int> range) : ScalarField(range) {}
 
- PeriodicField() : ScalarField() {} // by default is constructed a scalard field on a 2D space, equal to 0 at the origin and not defined elsewhere.
+ PeriodicField() : ScalarField() {} // by default is constructed a scalar field on a 2D space, equal to 0 at the origin and not defined elsewhere.
  PeriodicField(const PeriodicField & u) : ScalarField(u) {} // overloading the copy constructor because the default one let both m_data pointers point the same memory
     virtual ~PeriodicField();
     

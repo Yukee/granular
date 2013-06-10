@@ -15,7 +15,7 @@ class FD1Solver
 public:
     FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *eq, Vector<double> lowerLeftCorner);
 
-    VectorField get_numerical_flux_gradient(VectorField un);
+    VectorField get_numerical_flux_gradient(const VectorField & un);
 
     inline VectorField get_position()
     {
@@ -76,12 +76,6 @@ inline Vector< Vector<double> > get_domain_bounds()
     {
       get_numerical_flux_gradient(u0);
       return un_derivatives[0];
-    }
-
-    inline Vector<TensorField> get_flux_jacobian(VectorField u0)
-    {
-        get_numerical_flux_gradient(u0);
-        return m_eq->get_convectionFluxJacobian(upper_right_intermediate_un_values[0]);
     }
 
     inline VectorField get_initial_field(VectorField u0)

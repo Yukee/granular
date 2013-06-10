@@ -12,7 +12,7 @@ class ScalarField
 
 public:
     // constructs a scalar field on a 2D space, equal to 0 at the origin and not defined elsewhere.
-  ScalarField();
+    ScalarField();
 
     // overloading the copy constructor because the default one let both m_data pointers point the same memory
     ScalarField(const ScalarField &);
@@ -36,6 +36,7 @@ public:
         return m_data_len;
     }
     ScalarField & operator=(const ScalarField &);
+    ScalarField & operator=(const double &);
     bool operator==(const ScalarField &);
 
     // each line of the stream contains position coordinates followed by field value at that position

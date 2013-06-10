@@ -9,32 +9,15 @@ class Burgers1D : public Flux
 
  Burgers1D() : Flux(1,1){}
 
-  inline TensorField evaluate(VectorField u)
-  {
-    m_evaluated_flux[0][0] = 0.5*u[0]*u[0];
-    return m_evaluated_flux;
-  }
-
   inline VectorField evaluate(VectorField u, int d)
   {
     m_evaluated_flux_d[0] = 0.5*u[0]*u[0];
     return m_evaluated_flux_d;
   }
 
-  inline Vector<TensorField> evaluate_jacobian(VectorField u)
-  {
-    m_evaluated_flux_jacobian[0][0][0] = u[0];
-    return m_evaluated_flux_jacobian;
-  }
-
   inline SField get_max_eigenvalue(VectorField u, int d)
   {
     return u[0];
-  }
-
-  inline bool has_exact_jacobian()
-  {
-    return true;
   }
 };
 

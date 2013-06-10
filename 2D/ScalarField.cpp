@@ -55,6 +55,12 @@ ScalarField & ScalarField::operator=(const ScalarField & u)
     return *this;
 }
 
+ScalarField & ScalarField::operator=(const double & k)
+{
+  for(unsigned int i=0;i<m_data_len;++i) m_data[i] = k;
+  return *this;
+} 
+
 bool ScalarField::operator==(const ScalarField & u)
 {
     bool are_equal = false;
@@ -250,7 +256,7 @@ Vector<int> ScalarField::get_pos(int i) const
 
 void ScalarField::write_in_file(ostream & output, const Vector<double> deltaX, const Vector<double> lowerLeftCorner)
 {
-  Vector<int> pTemp(m_r_len);
+ Vector<int> pTemp(m_r_len);
     for(unsigned int i=0;i<m_data_len;i++)
     {
         pTemp = get_pos(i);

@@ -18,12 +18,6 @@ VectorField Equation::get_convectionFlux(VectorField u, int d)
   return m_conv->evaluate(u,d);
 }
 
-Vector<TensorField> Equation::get_convectionFluxJacobian(VectorField u)
-{
-  if(!m_conv->has_exact_jacobian()) std::cout << "In Equation::get_convectionFluxJacobian: the exact jacobian of the convetion flux is unknown." << std::endl;
-  return m_conv->evaluate_jacobian(u);
-}
-
 VectorField Equation::get_diffusionFlux(VectorField u,int d)
 {
   return m_diff->evaluate(u,d);

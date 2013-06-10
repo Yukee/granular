@@ -6,22 +6,28 @@ using namespace std;
 #define DEBUG
 
 double & PrescribedField::operator()(Vector<int> component)
-{	
-	for(unsigned int d=0;d<m_r_len;d++)
+{
+  for(unsigned int d=0;d<m_r_len;d++) if(component[d] > m_r[d] || component[d] < -1)
+					{
+					  cout << "received m_r["<<d<<"] = " << m_r[d] << " expected -1 <= m_r[d] <= " << m_r[d] << endl;
+					  throw invalid_argument("In PrescribedField::operator()");
+					}
+
+  for(unsigned int d=0;d<m_r_len;d++)
+    {
+      if(component[d] == -1)
 	{
-		if(component[d] == -1)
-		{
-			component = component.drop(d);
-			return m_bounds[2*d](component);
-		}
-		
-		if(component[d] == m_r[d])
-		{
-			component = component.drop(d);
-			return m_bounds[2*d+1](component);
-		}
+	  component = component.drop(d);
+	  return m_bounds[2*d](component);
 	}
-	return ScalarField::operator ()(component);
+		
+      if(component[d] == m_r[d])
+	{
+	  component = component.drop(d);
+	  return m_bounds[2*d+1](component);
+	}
+    }
+  return ScalarField::operator ()(component);
 }
 
 void PrescribedField::set_bound(const int d, const int i, const ScalarField & u)
@@ -44,6 +50,16 @@ void PrescribedField::resize_field(Vector<int> range)
     m_r_len = range.size();
     m_r = range;
 
+    m_bounds.resize(2*m_r_len);
+    Vector<int> range_surf = m_r;
+    //Vector< Vector<int> > b = range_surf.get_base_vectors(1,0); for(unsigned int i=0;i<m_r_len;i++) range_surf = range_surf + 2*b[i];
+	 
+    for(unsigned int d=0;d<m_r_len;d++)
+      {
+	m_bounds[2*d].resize_field(range_surf.drop(d));
+	m_bounds[2*d+1].resize_field(range_surf.drop(d));
+      }
+
     m_data_len = 1;
     for(unsigned int i=0; i<m_r_len; i++) m_data_len*=m_r[i];
     if(m_data) delete[] m_data;
@@ -55,10 +71,10 @@ Vector<int> PrescribedField::get_pos(int i) const
     return ScalarField::get_pos(i);
 }
 
-/************************************************/
-
 PrescribedField & PrescribedField::operator=(const PrescribedField & u)
 {
+  m_bounds = u.m_bounds;
+
     if(!(&u == this))
     {
         m_r_len = u.m_r_len;
@@ -76,6 +92,15 @@ PrescribedField & PrescribedField::operator=(const PrescribedField & u)
 
     return *this;
 }
+
+PrescribedField & PrescribedField::operator=(const double & k)
+{
+  for(unsigned int i=0;i<m_data_len;++i) m_data[i] = k;
+  return *this;
+} 
+
+/************************************************/
+
 
 bool PrescribedField::operator==(const PrescribedField & u)
 {

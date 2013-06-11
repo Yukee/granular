@@ -13,7 +13,7 @@ EulerSolver::EulerSolver(double deltaT, double T, FD1Solver *spatialSolver, Vect
 
 void EulerSolver::get_solution(string name, double dt)
 {
-	timeSolver::get_solution(name, dt);
+  timeSolver::get_solution(name, dt);
 
   Vector<double> deltaX = m_spatialSolver->get_deltaX();
   Vector<double> lowerLeftCorner = m_spatialSolver->get_lowerLeftCorner();

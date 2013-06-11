@@ -9,13 +9,13 @@ class ZeroFlux : public Flux
 
  ZeroFlux(int d, int i) : Flux(d,i){}
 
-  inline VectorField evaluate(VectorField u, int d)
+  inline VectorField evaluate(const VectorField & u, const int d)
   {
-    for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux_d[i] = 0;
+    for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux_d[i] = 0*u[i];
     return m_evaluated_flux_d;
   }
 
-  inline SField get_max_eigenvalue(VectorField u, int d)
+  inline SField get_max_eigenvalue(const VectorField & u, const int d)
   {
     m_max_eigenvalue = 0;
     return m_max_eigenvalue;

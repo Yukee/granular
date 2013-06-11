@@ -35,9 +35,9 @@ public:
 
   ~Equation();
 
-  VectorField get_convectionFlux(VectorField,int);
-  VectorField get_diffusionFlux(VectorField,int);
-  SField get_max_eigenvalue(VectorField,int);
+  VectorField get_convectionFlux(const VectorField &, const int);
+  VectorField get_diffusionFlux(const VectorField &, const int);
+  SField get_max_eigenvalue(const VectorField &, const int);
   int get_space_dimensions();
   int get_solved_dimensions();
 };

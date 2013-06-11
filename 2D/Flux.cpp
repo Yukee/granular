@@ -22,7 +22,7 @@ int Flux::get_solved_dimensions()
 
 VectorField Flux::evaluate(const VectorField & u, const int d)
 {
-	for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux_d[i] = 0;
+	for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux_d[i] = 0*u[i];
 	return m_evaluated_flux_d;
 }
 
@@ -37,7 +37,7 @@ SField Flux::get_max_eigenvalue(const VectorField & u, const int d)
 	return m_max_eigenvalue;
 }
 
-void Flux::set_parameter(const VectorField & param)
+void Flux::set_parameter(const SField & param)
 {
 	m_param = param;
 }

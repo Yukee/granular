@@ -7,7 +7,7 @@
 #include "NullField.h"
 #include "PrescribedField.h"
 
-typedef ScalarField SField;
+typedef PrescribedField SField;
 typedef Vector<SField> VectorField;
 typedef Vector<VectorField> TensorField;
 
@@ -21,7 +21,7 @@ class Flux
   SField m_max_eigenvalue;
 
   // opional parameter field
-  VectorField m_param;
+  SField m_param;
 
   // The positions on the numerical grid your flux is evaluated on; useless if the flux is not explicitely dependant on the position (which is the case if your equation is quasilinear)
   VectorField m_positions;
@@ -41,7 +41,7 @@ class Flux
   // returns the maximal eigenvalue (in module) of the restriction to 1 space dimension of the jacobian
   virtual SField get_max_eigenvalue(const VectorField &, const int);
   
-  virtual void set_parameter(const VectorField &);
+  virtual void set_parameter(const SField &);
 
   int get_space_dimensions();
   int get_solved_dimensions();

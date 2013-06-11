@@ -14,6 +14,8 @@ class PeriodicField : public ScalarField
  PeriodicField(const PeriodicField & u) : ScalarField(u) {} // overloading the copy constructor because the default one let both m_data pointers point the same memory
     virtual ~PeriodicField();
     
+    PeriodicField & operator=(const double &);
+
   /**************************************/
 
     void resize_field(Vector<int> range);

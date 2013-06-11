@@ -51,7 +51,7 @@ FD1Solver::FD1Solver(Vector<double> deltaX, Vector<double> xInterval, Equation *
 
   // caca
   unity.resize_field (m_nxSteps);
-  unity =  1 + 0*unity;
+  unity = 1;
 }
 
 FD1Solver::~FD1Solver()
@@ -150,12 +150,12 @@ void FD1Solver::compute_localSpeed()
 
   for(int dir=0;dir<m_n;dir++)
     {
-      upperSpeed = m_eq->get_max_eigenvalue(upper_right_intermediate_un_values[dir], dir);
-      lowerSpeed = m_eq->get_max_eigenvalue(lower_right_intermediate_un_values[dir], dir);
+      upperSpeed = m_eq->get_max_eigenvalue(upper_right_intermediate_un_values[dir], dir).module();
+      lowerSpeed = m_eq->get_max_eigenvalue(lower_right_intermediate_un_values[dir], dir).module();
       right_localSpeed[dir] = upperSpeed.max_field(lowerSpeed);
 
-      upperSpeed = m_eq->get_max_eigenvalue(upper_left_intermediate_un_values[dir], dir);
-      lowerSpeed = m_eq->get_max_eigenvalue(lower_left_intermediate_un_values[dir], dir);
+      upperSpeed = m_eq->get_max_eigenvalue(upper_left_intermediate_un_values[dir], dir).module();
+      lowerSpeed = m_eq->get_max_eigenvalue(lower_left_intermediate_un_values[dir], dir).module();
       left_localSpeed[dir] = upperSpeed.max_field(lowerSpeed);
     }
 }
@@ -187,34 +187,27 @@ void FD1Solver::compute_numerical_diffusion_flux()
       right_diffusion_flux[d] = m_eq->get_diffusionFlux(upper_right_intermediate_un_values[d], d);
       left_diffusion_flux[d] = m_eq->get_diffusionFlux(upper_left_intermediate_un_values[d], d);
     }
-   
+
 }
 
 //the flux gradient may be infinite, if you take a too large time step.
 VectorField FD1Solver::get_numerical_flux_gradient(const VectorField & un)
 {
   m_un = un;
-
   compute_un_derivatives();
-
   compute_intermediate_un_values();
-
   compute_localSpeed();
-
   compute_numerical_convection_flux();
-
   compute_numerical_diffusion_flux();
-
   VectorField flux_gradient(m_m, SField (m_nxSteps));
-  for(int i=0;i<m_m;i++) for(int it=0;it<flux_gradient[i].get_size();++it) flux_gradient[i][it] = 0;
+  for(int i=0;i<m_m;i++) flux_gradient[i] = 0;
 
   for(int d=0;d<m_n;d++)
-    {
+    { 
       flux_gradient = flux_gradient 
 	+ ((1./m_deltaX[d])*unity)*( right_convection_flux[d] - left_convection_flux[d]
 				     - right_diffusion_flux[d] + left_diffusion_flux[d] );
     }
-
   return flux_gradient;
 }
 

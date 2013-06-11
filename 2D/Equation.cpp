@@ -13,17 +13,17 @@ Equation::~Equation()
   if(m_diff) delete m_diff;
 }
 
-VectorField Equation::get_convectionFlux(VectorField u, int d)
+VectorField Equation::get_convectionFlux(const VectorField & u, const int d)
 {
   return m_conv->evaluate(u,d);
 }
 
-VectorField Equation::get_diffusionFlux(VectorField u,int d)
+VectorField Equation::get_diffusionFlux(const VectorField & u,const int d)
 {
   return m_diff->evaluate(u,d);
 }
 
-SField Equation::get_max_eigenvalue(VectorField u, int d)
+SField Equation::get_max_eigenvalue(const VectorField & u, const int d)
 {
   return m_conv->get_max_eigenvalue(u,d);
 }

@@ -37,6 +37,13 @@ PeriodicField::~PeriodicField()
   m_data = NULL;
 }
 
+PeriodicField & PeriodicField::operator=(const double & k)
+{
+  for(unsigned int i=0;i<m_data_len;++i) m_data[i] = k;
+  return *this;
+} 
+
+
 /**********************************************/
 
 PeriodicField & PeriodicField::operator=(const PeriodicField & u)

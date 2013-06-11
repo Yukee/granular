@@ -29,8 +29,9 @@ int main()
 {
   int dim = 2;
   Vector<double> dx(dim,0.1); Vector<double> xI(dim); xI[0]=3; xI[1]=1; Vector<double> llc(dim,0); llc[0]=-xI[0];
-  Flux *ptrf = new Flume2DConvectionFlux();
-  Equation *eq = new Equation(ptrf); //don't forget to set the sr somewhere!!
+  //Flux *ptrDF = new ZeroFlux(2,3);
+  Flux *ptrCF = new Flume2DConvectionFlux();
+  Equation *eq = new Equation(ptrCF); //don't forget to set the sr somewhere!!
   FD1Solver sol(dx, xI, eq, llc);
 
   Vector<int> xr (dim); for(int d=0;d<dim;d++) xr[d] = xI[d]/dx[d];
@@ -49,27 +50,27 @@ int main()
     }
   // the velocity field is null outside the flow, as well as the sr
   u0 = bound*u0;
-  SField sr = 0.035*bound; ptrf->set_parameter(sr);
+  SField sr = 0.035*bound; ptrCF->set_parameter(sr);
 
   // specifies the value of the solved field on the surface enclosing the intergration domain (Dirichlet conditions)
   
-  ScalarField phiWest (xr.drop(0)); 
-  for(int it=0;it<phiWest.get_size();++it) phiWest[it] = phi0( llc[0]-dx[0] , pos[1][it] );
-  phi.set_bound(0, -1, phiWest);
-  ScalarField phiSouth (xr.drop(1)); phi.set_bound(1, -1, phiSouth);
-  for(int it=0;it<phiSouth.get_size();++it) phiSouth[it] = phi0( pos[0][it], llc[1]-dx[1] );
-  phi.set_bound(0, -1, phiSouth);
-  // phi is null at the East and North boundary surfaces, and the velocity field is null at the boundaries
-  ScalarField zeroVert(xr.drop(0)); zeroVert = 0; ScalarField zeroHoriz(xr.drop(1)); zeroHoriz = 0;
-  phi.set_bound(1, 1, zeroHoriz); phi.set_bound(0, 1, zeroVert);
-  for(int d=0;d<dim;d++)
-    {
-      for(int orient=-1;orient<2;orient+=2)
-  	{
-  	  u0[d].set_bound(1, orient, zeroHoriz);
-  	  u0[d].set_bound(0, orient, zeroVert);
-  	} 
-    }
+  //ScalarField phiWest (xr.drop(0)); 
+  //for(int it=0;it<phiWest.get_size();++it) phiWest[it] = phi0( llc[0]-dx[0] , pos[1][it] );
+  //phi.set_bound(0, -1, phiWest);
+  //ScalarField phiSouth (xr.drop(1)); phi.set_bound(1, -1, phiSouth);
+  //for(int it=0;it<phiSouth.get_size();++it) phiSouth[it] = phi0( pos[0][it], llc[1]-dx[1] );
+  //phi.set_bound(0, -1, phiSouth);
+  //// phi is null at the East and North boundary surfaces, and the velocity field is null at the boundaries
+  //ScalarField zeroVert(xr.drop(0)); zeroVert = 0; ScalarField zeroHoriz(xr.drop(1)); zeroHoriz = 0;
+  //phi.set_bound(1, 1, zeroHoriz); phi.set_bound(0, 1, zeroVert);
+  //for(int d=0;d<dim;d++)
+    //{
+      //for(int orient=-1;orient<2;orient+=2)
+  	//{
+  	  //u0[d].set_bound(1, orient, zeroHoriz);
+  	  //u0[d].set_bound(0, orient, zeroVert);
+  	//} 
+    //}
 
   // the actual solved field is a vector comtaining the velocity and the concentration fields
   VectorField uInit (3); uInit[0] = phi; uInit[1] = u0[0]; uInit[2] = u0[1];

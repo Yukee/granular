@@ -33,7 +33,6 @@ void EulerSolver::get_solution(string name, double dt)
   for(currenttime=0;currenttime<=m_T;currenttime += newDeltaT)
     {
       df = m_spatialSolver->get_numerical_flux_gradient(m_un);
-
       testDeltaT = m_spatialSolver->check_CFL(newDeltaT);
       if(testDeltaT!=newDeltaT) newDeltaT = testDeltaT;
 

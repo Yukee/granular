@@ -165,12 +165,12 @@ void FD1Solver::compute_numerical_convection_flux()
   //no particular bc on the flux?
   VectorField upperFlux;
   VectorField lowerFlux;
-
+	
   for(int d=0;d<m_n;d++)
     {
       upperFlux = m_eq->get_convectionFlux(upper_right_intermediate_un_values[d], d);
       lowerFlux = m_eq->get_convectionFlux(lower_right_intermediate_un_values[d], d);
-      right_convection_flux[d] = (0.5*unity)*(upperFlux + lowerFlux) + (-0.5*unity)*right_localSpeed[d]*(upper_right_intermediate_un_values[d]  - lower_right_intermediate_un_values[d]);
+      right_convection_flux[d] = (0.5*unity)*(upperFlux + lowerFlux) + (-0.5*unity)*right_localSpeed[d]*(upper_right_intermediate_un_values[d] - lower_right_intermediate_un_values[d]);
 
       upperFlux = m_eq->get_convectionFlux(upper_left_intermediate_un_values[d], d);
       lowerFlux = m_eq->get_convectionFlux(lower_left_intermediate_un_values[d], d);
@@ -208,6 +208,7 @@ VectorField FD1Solver::get_numerical_flux_gradient(const VectorField & un)
 	+ ((1./m_deltaX[d])*unity)*( right_convection_flux[d] - left_convection_flux[d]
 				     - right_diffusion_flux[d] + left_diffusion_flux[d] );
     }
+
   return flux_gradient;
 }
 

@@ -7,7 +7,7 @@
 #include "NullField.h"
 #include "PrescribedField.h"
 
-typedef PrescribedField SField;
+typedef PeriodicField SField;
 typedef Vector<SField> VectorField;
 typedef Vector<VectorField> TensorField;
 

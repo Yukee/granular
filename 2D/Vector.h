@@ -60,8 +60,7 @@ public :
   inline friend Vector<T> operator+(const Vector<T> & v1, const Vector<T> & v2)
   {
     if(v1.N != v2.N) throw std::invalid_argument("In Vector::operator+");
-    Vector<T> temp;
-    temp.N = v1.N;
+    Vector<T> temp(v1.N);
     for(unsigned int i=0;i<temp.N;i++) temp.m_data[i] = v1.m_data[i] + v2.m_data[i];
     return temp;
   }
@@ -69,16 +68,14 @@ public :
   inline friend Vector<T> operator-(const Vector<T> & left, const Vector<T> & right)
   {
     if(left.N != right.N) throw std::invalid_argument("In Vector::operator-");
-    Vector<T> temp;
-    temp.N = left.N;
+    Vector<T> temp(left.N);
     for(unsigned int i=0;i<temp.N;i++) temp.m_data[i] = left.m_data[i] - right.m_data[i];
     return temp;
   }
 
   inline friend Vector<T> operator*(const T & k, const Vector<T> & v)
   {
-    Vector<T> temp;
-    temp.N = v.N;
+    Vector<T> temp(v.N);
     for(unsigned int i=0;i<temp.N;i++) temp.m_data[i] = k*v.m_data[i];
     return temp;
   }

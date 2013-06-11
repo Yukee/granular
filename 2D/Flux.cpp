@@ -33,7 +33,7 @@ VectorField Flux::evaluate(const VectorField & u, const VectorField & v, const i
 
 SField Flux::get_max_eigenvalue(const VectorField & u, const int d)
 {
-	m_max_eigenvalue = 0;
+	m_max_eigenvalue = 0*u[0];
 	return m_max_eigenvalue;
 }
 

@@ -19,8 +19,8 @@ class NSFlux : public Flux
 
   inline SField get_max_eigenvalue(const VectorField & u, const int d)
   {
-    // max eigenvalue is 2*u, we want the module.
-    m_max_eigenvalue = 2*u[d].module();
+    // max eigenvalue is 2*u
+    m_max_eigenvalue = 2*u[d];
     return m_max_eigenvalue;
   }
 

@@ -23,14 +23,14 @@ class Flume2DConvectionFlux: public Flux
     switch(d){
     case 0:
       m_evaluated_flux_d[0] = u[0]*u[1];
-      m_evaluated_flux_d[1] = 0;
-      m_evaluated_flux_d[2] = 0;
+      m_evaluated_flux_d[1] = 0*u[1];
+      m_evaluated_flux_d[2] = 0*u[2];
       break;
 
     case 1:
       m_evaluated_flux_d[0] = u[0]*u[2] - m_segregation_rate*u[0]*(1-u[0]);
-      m_evaluated_flux_d[1] = 0;
-      m_evaluated_flux_d[2] = 0;
+      m_evaluated_flux_d[1] = 0*u[1];
+      m_evaluated_flux_d[2] = 0*u[2];
       break;
 
     default:

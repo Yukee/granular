@@ -28,7 +28,7 @@ using namespace std;
 int main()
 {
   int dim = 2;
-  Vector<double> dx(dim,0.1); Vector<double> xI(dim); xI[0]=3; xI[1]=1; Vector<double> llc(dim,0); llc[0]=-xI[0];
+  Vector<double> dx(dim,0.05); Vector<double> xI(dim); xI[0]=4; xI[1]=1; Vector<double> llc(dim,0); llc[0]=-xI[0];
   //Flux *ptrDF = new ZeroFlux(2,3);
   Flux *ptrCF = new Flume2DConvectionFlux();
   Equation *eq = new Equation(ptrCF); //don't forget to set the sr somewhere!!
@@ -54,23 +54,24 @@ int main()
 
   // specifies the value of the solved field on the surface enclosing the intergration domain (Dirichlet conditions)
   
-  //ScalarField phiWest (xr.drop(0)); 
-  //for(int it=0;it<phiWest.get_size();++it) phiWest[it] = phi0( llc[0]-dx[0] , pos[1][it] );
-  //phi.set_bound(0, -1, phiWest);
-  //ScalarField phiSouth (xr.drop(1)); phi.set_bound(1, -1, phiSouth);
-  //for(int it=0;it<phiSouth.get_size();++it) phiSouth[it] = phi0( pos[0][it], llc[1]-dx[1] );
-  //phi.set_bound(0, -1, phiSouth);
-  //// phi is null at the East and North boundary surfaces, and the velocity field is null at the boundaries
-  //ScalarField zeroVert(xr.drop(0)); zeroVert = 0; ScalarField zeroHoriz(xr.drop(1)); zeroHoriz = 0;
-  //phi.set_bound(1, 1, zeroHoriz); phi.set_bound(0, 1, zeroVert);
-  //for(int d=0;d<dim;d++)
-    //{
-      //for(int orient=-1;orient<2;orient+=2)
-  	//{
-  	  //u0[d].set_bound(1, orient, zeroHoriz);
-  	  //u0[d].set_bound(0, orient, zeroVert);
-  	//} 
-    //}
+  ScalarField phiWest (xr.drop(0)); 
+  for(int it=0;it<phiWest.get_size();++it) phiWest[it] = phi0( llc[0]-dx[0] , pos[1][it] );
+  phi.set_bound(0, -1, phiWest);
+  ScalarField phiSouth (xr.drop(1)); phi.set_bound(1, -1, phiSouth);
+  for(int it=0;it<phiSouth.get_size();++it) phiSouth[it] = 1;//phi0( pos[0][it], llc[1]-dx[1] );
+  phi.set_bound(1, -1, phiSouth);
+  //phi is null at the East and North boundary surfaces, and the velocity field is null at the boundaries
+  ScalarField zeroVert(xr.drop(0)); zeroVert = 0; ScalarField zeroHoriz(xr.drop(1)); zeroHoriz = 0;
+  phi.set_bound(1, 1, zeroHoriz); phi.set_bound(0, 1, zeroVert);
+  for(int d=0;d<dim;d++)
+    {
+      for(int orient=-1;orient<2;orient+=2)
+  	{
+  	  u0[d].set_bound(1, orient, zeroHoriz);
+  	  u0[d].set_bound(0, orient, zeroVert);
+  	} 
+    }
+
 
   // the actual solved field is a vector comtaining the velocity and the concentration fields
   VectorField uInit (3); uInit[0] = phi; uInit[1] = u0[0]; uInit[2] = u0[1];
@@ -93,9 +94,18 @@ int main()
   // jac[1] = ptrf->get_max_eigenvalue(uInit, 1);
   // write_VectorField(jac, pos, f);
 
+  // fstream phibWest;
+  // phibWest.open("Results/Flume2D_initial/phibWest.tsv",ios::out);
+  // Vector<int> x(2); x[0] = 1; x[1] = 0; Vector<int> y(2); y[0] = 0; y[1] = 1;
+  // for(int i=0;i<xr[1];i++) phibWest << pos[0](i*y) -dx[0] << "\t" << pos[1](i*y) << "\t" << uInit[0](i*y - x) << endl;
+
+  // fstream phibSouth;
+  // phibSouth.open("Results/Flume2D_initial/phibSouth.tsv",ios::out);
+  // for(int i=0;i<xr[0];i++) phibSouth << pos[0](i*x) << "\t" << pos[1](i*x) - dx[1] << "\t" << uInit[0](i*x - y) << endl;
+
   double dt = 0.01; double T = 10;
   EulerSolver ts(dt, T, &sol, uInit);
-  ts.get_solution("2DFlume_no_diffusion",0.01);
+  ts.get_solution("2DFlume_no_diffusion",1);
 
   return 0;
 }

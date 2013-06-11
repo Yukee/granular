@@ -11,16 +11,17 @@ class NSFlux : public Flux
 
  NSFlux(int i) : Flux(i,i){}
 
-  inline VectorField evaluate(VectorField u, int d)
+  inline VectorField evaluate(const VectorField & u, const int d)
   {
     for(int i=0;i<m_solved_dimensions;i++) m_evaluated_flux_d[i] = u[i]*u[d];
     return m_evaluated_flux_d;
   }
 
-  inline SField get_max_eigenvalue(VectorField u, int d)
+  inline SField get_max_eigenvalue(const VectorField & u, const int d)
   {
     // max eigenvalue is 2*u, we want the module.
-    return 2*u[d].module();
+    m_max_eigenvalue = 2*u[d].module();
+    return m_max_eigenvalue;
   }
 
   inline int delta(int i,int j)

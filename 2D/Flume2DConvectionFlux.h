@@ -13,12 +13,12 @@ class Flume2DConvectionFlux: public Flux
 
  Flume2DConvectionFlux(): Flux(2,3) {m_segregation_rate = 0;}
 
-  inline void set_segregation_rate(SField sr)
+  inline void set_parameter(const VectorField & sr)
   {
-    m_segregation_rate = sr;
+    m_segregation_rate = sr[0];
   }
 
-  inline virtual VectorField evaluate(VectorField u, int d)
+  inline virtual VectorField evaluate(const VectorField & u, const int d)
   {
     switch(d){
     case 0:
@@ -39,7 +39,7 @@ class Flume2DConvectionFlux: public Flux
     return m_evaluated_flux_d;
   }
 
-  inline virtual SField get_max_eigenvalue(VectorField u, int d)
+  inline virtual SField get_max_eigenvalue(const VectorField & u, const int d)
   {
     switch(d){
     case 0:

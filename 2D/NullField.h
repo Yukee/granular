@@ -13,6 +13,8 @@ class NullField : public ScalarField
     NullField(const NullField & u) : ScalarField(u) {}
     virtual ~NullField();
     
+    NullField & operator=(const double &);
+    
  /*************************/
     void resize_field(Vector<int> range);
     inline unsigned int get_space_dimension() const

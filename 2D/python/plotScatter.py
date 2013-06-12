@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # loads data file into a 2D array (arr[i][j] is the element at line i, column j in the tsv file)
-arrData = np.loadtxt("../Results/2DNS_19.tsv")
+arrData = np.loadtxt("../Results/burgers_99.tsv")
 x = arrData[:,0]
 y = arrData[:,1]
 z = arrData[:,2]

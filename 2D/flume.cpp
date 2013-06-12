@@ -90,8 +90,8 @@ int main()
   fstream f;
   f.open("Results/Flume2D_initial/convection_flux.tsv",ios::out);
   VectorField jac(2);
-  jac[0] = ptrf->get_max_eigenvalue(uInit, 0);
-  jac[1] = ptrf->get_max_eigenvalue(uInit, 1);
+  jac[0] = ptrCF->get_max_eigenvalue(uInit, 0);
+  jac[1] = ptrCF->get_max_eigenvalue(uInit, 1);
   write_VectorField(jac, pos, f);
 
   fstream phibWest;
@@ -103,7 +103,7 @@ int main()
   phibSouth.open("Results/Flume2D_initial/phibSouth.tsv",ios::out);
   for(int i=0;i<xr[0];i++) phibSouth << pos[0](i*x) << "\t" << pos[1](i*x) - dx[1] << "\t" << uInit[0](i*x - y) << endl;
 
-  double dt = 0.005; double T = 2;
+  double dt = 0.005; double T = 20;
   EulerSolver ts(dt, T, &sol, uInit);
   ts.get_solution("2DFlume_test_vel",1);
 

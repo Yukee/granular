@@ -8,7 +8,7 @@
 #include "PrescribedField.h"
 #include "ImmersedField.h"
 
-typedef PeriodicField SField;
+typedef PrescribedField SField;
 typedef Vector<SField> VectorField;
 typedef Vector<VectorField> TensorField;
 

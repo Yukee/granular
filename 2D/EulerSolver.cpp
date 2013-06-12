@@ -2,6 +2,7 @@
 #include "FD1Solver.h"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
+#include "WriteVectorField.h"
 
 using namespace std;
 
@@ -19,6 +20,9 @@ void EulerSolver::get_solution(string name, double dt)
   Vector<double> lowerLeftCorner = m_spatialSolver->get_lowerLeftCorner();
   fstream data;
   string path;
+
+  // used in write_VectorField
+  VectorField pos = m_spatialSolver->get_position();
 
   double testDeltaT;
   double newDeltaT = m_deltaT;
@@ -44,7 +48,11 @@ void EulerSolver::get_solution(string name, double dt)
 	  //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; Only in C++ 11
 	  path =  "Results/" + name + "_" + boost::lexical_cast<string>(writingCounter) + ".tsv";
 	  data.open(path.c_str(), ios::out);
-	  un1[0].write_in_file(data, deltaX, lowerLeftCorner);
+	  //un1[0].write_in_file(data, deltaX, lowerLeftCorner);
+
+	  VectorField velocity = un1.drop(0);
+	  write_VectorField(velocity, pos, data);
+
 	  //un1[0].write_in_file_matrixform(data);
 	  data.close();
 	  writingCounter++;

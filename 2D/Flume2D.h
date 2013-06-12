@@ -5,7 +5,7 @@
 /* 2D setup in the centre plane for the flume problem.
 Assuming that H = W = 1. If not, multiply by the expression of H and W indicated in the commented text before each function. If "complicated" is indicated, you cannot just multiply by something and you will have to recalculate th expression depending and H and W. If nothing is indicated nothing is to be changed. */
 
-const static double U = 2.3; const static double uF = 2.; const static double alpha=0.5; const static int m = 2; const static int n = 4; const static double shift = 0.05;
+const static double U = 2.3; const static double uF = 2.; const static double alpha=0.5; const static int m = 2; const static int n = 4; const static double shift = 0.1;
 
 double Sech(double x)
 {

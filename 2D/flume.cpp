@@ -76,36 +76,36 @@ int main()
   // the actual solved field is a vector comtaining the velocity and the concentration fields
   VectorField uInit (3); uInit[0] = phi; uInit[1] = u0[0]; uInit[2] = u0[1];
   
-  // // plots the various fields and domain
-  // fstream init;
-  // init.open("Results/Flume2D_initial/phi0.tsv",ios::out);
-  // phi.write_in_file_matrixform(init);
-  // fstream speed;
-  // speed.open("Results/Flume2D_initial/speed.tsv",ios::out);
-  // write_VectorField(u0, pos, speed);
-  // fstream b;
-  // b.open("Results/Flume2D_initial/boundary.tsv",ios::out);
-  // bound.write_in_file_matrixform(b);
+  // plots the various fields and domain
+  fstream init;
+  init.open("Results/Flume2D_initial/phi0.tsv",ios::out);
+  phi.write_in_file_matrixform(init);
+  fstream speed;
+  speed.open("Results/Flume2D_initial/speed.tsv",ios::out);
+  write_VectorField(u0, pos, speed);
+  fstream b;
+  b.open("Results/Flume2D_initial/boundary.tsv",ios::out);
+  bound.write_in_file_matrixform(b);
 
-  // fstream f;
-  // f.open("Results/Flume2D_initial/convection_flux.tsv",ios::out);
-  // VectorField jac(2);
-  // jac[0] = ptrf->get_max_eigenvalue(uInit, 0);
-  // jac[1] = ptrf->get_max_eigenvalue(uInit, 1);
-  // write_VectorField(jac, pos, f);
+  fstream f;
+  f.open("Results/Flume2D_initial/convection_flux.tsv",ios::out);
+  VectorField jac(2);
+  jac[0] = ptrf->get_max_eigenvalue(uInit, 0);
+  jac[1] = ptrf->get_max_eigenvalue(uInit, 1);
+  write_VectorField(jac, pos, f);
 
-  // fstream phibWest;
-  // phibWest.open("Results/Flume2D_initial/phibWest.tsv",ios::out);
-  // Vector<int> x(2); x[0] = 1; x[1] = 0; Vector<int> y(2); y[0] = 0; y[1] = 1;
-  // for(int i=0;i<xr[1];i++) phibWest << pos[0](i*y) -dx[0] << "\t" << pos[1](i*y) << "\t" << uInit[0](i*y - x) << endl;
+  fstream phibWest;
+  phibWest.open("Results/Flume2D_initial/phibWest.tsv",ios::out);
+  Vector<int> x(2); x[0] = 1; x[1] = 0; Vector<int> y(2); y[0] = 0; y[1] = 1;
+  for(int i=0;i<xr[1];i++) phibWest << pos[0](i*y) -dx[0] << "\t" << pos[1](i*y) << "\t" << uInit[0](i*y - x) << endl;
 
-  // fstream phibSouth;
-  // phibSouth.open("Results/Flume2D_initial/phibSouth.tsv",ios::out);
-  // for(int i=0;i<xr[0];i++) phibSouth << pos[0](i*x) << "\t" << pos[1](i*x) - dx[1] << "\t" << uInit[0](i*x - y) << endl;
+  fstream phibSouth;
+  phibSouth.open("Results/Flume2D_initial/phibSouth.tsv",ios::out);
+  for(int i=0;i<xr[0];i++) phibSouth << pos[0](i*x) << "\t" << pos[1](i*x) - dx[1] << "\t" << uInit[0](i*x - y) << endl;
 
-  double dt = 0.01; double T = 10;
+  double dt = 0.005; double T = 2;
   EulerSolver ts(dt, T, &sol, uInit);
-  ts.get_solution("2DFlume_no_diffusion",1);
+  ts.get_solution("2DFlume_test_vel",1);
 
   return 0;
 }

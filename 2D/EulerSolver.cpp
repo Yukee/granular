@@ -48,10 +48,10 @@ void EulerSolver::get_solution(string name, double dt)
 	  //path = "Results/" + name + "_" + to_string(writingCounter) + ".tsv"; Only in C++ 11
 	  path =  "Results/" + name + "_" + boost::lexical_cast<string>(writingCounter) + ".tsv";
 	  data.open(path.c_str(), ios::out);
-	  //un1[0].write_in_file(data, deltaX, lowerLeftCorner);
+	  un1[0].write_in_file(data, deltaX, lowerLeftCorner);
 
-	  VectorField velocity = un1.drop(0);
-	  write_VectorField(velocity, pos, data);
+	  //VectorField velocity = un1.drop(0);
+	  //write_VectorField(un1, pos, data);
 
 	  //un1[0].write_in_file_matrixform(data);
 	  data.close();
